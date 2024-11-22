@@ -3,63 +3,55 @@
 
 #include "user.h"
 
-User* CreateUser();
-void SupInsertUser(User **current, User *u);
 void DeleteUsers(User **u);
 User* FindMax(User *u);
 
-User* CreateUser(){
-    User *u = (User*)malloc(sizeof(User));
-
-    if(u == NULL){
-        return NULL;
-    }
-
-    printf("Insira o seu numero USP: ");
-    scanf("%d", &u->numero_usp);
-
-    u->name = (char *)malloc(sizeof(char) * 150);
-
-    printf("Insira seu nome: ");
-    getchar();
-    fgets(u->name, 150, stdin);
-
-    u->nextL = NULL;
-    u->nextR = NULL;
-    u->favoriteMovies = Create_List();
-
-    return u;
+User* InsertUser(Tree *t, User *newUser){
+    return SupInsertUser(t->root, newUser);
 }
 
-// Cria um novo usuário e insere ele na árvore
-int InsertUser(Tree *t){
-    User *u = CreateUser();
-
-    if(FindUser(t, u->numero_usp) != NULL){
-        return -1;
+User* SupInsertUser(User *current, User *newUser){
+    if(current == NULL){
+        return newUser;
     }
 
-    if(t == NULL){
-        return 0;
-    }
-
-    if(t->root == NULL){
-        t->root = u;
-    } else if(t->root->numero_usp > u->numero_usp){
-        return SupInsertUser(&t->root->nextL, u);
+    if(current->numero_usp > newUser->numero_usp){
+        current->nextL = InsertUser(current->nextL, newUser);
+    } else if(current->numero_usp < newUser->numero_usp) {
+        current->nextR = InsertUser(current->nextR, newUser);
     } else {
-        return SupInsertUser(&t->root->nextR, u);
+        return current;
     }
-}
 
-int SupInsertUser(User **current, User *u){
-    if(*current == NULL){
-        *current = u;
-        return 1;
+    int balance;
+    if(current->nextL == NULL && current->nextR == NULL){
+        current->degree = 0;
+        balance = 0;
+    } else if(current->nextL == NULL || current->nextR == NULL){
+        current->degree = (current->nextR == NULL) ? (current->nextL->degree + 1) : (current->nextR->degree + 1);
+        balance = (current->nextR == NULL) ? (current->degree - 0) :  (0 - current->degree);
     } else {
-    *current = ((*current)->numero_usp > u->numero_usp) ? (*current)->nextL : (*current)->nextR;
-        return SupInsertUser(current, u);
+        current->degree = (current->nextR > current->nextL) ? (current->nextR->degree + 1) : (current->nextL>degree + 1);
+        balance = current->nextL->degree - current->nextR->degree;
     }
+
+    if(balance > 1){
+        if(newUser->numero_usp < current->nextL->numero_usp){
+            return rotateRight(current);
+        } else {
+            current->nextL = rotateLeft(current->nextL);
+            return rotateRight(current);
+        }
+    } else if(balance < -1){
+        if(newUser->numero_usp < current->nextR->numero_usp){
+            current->nextR = rotateRight(current->rotateRight);
+            return rotateLeft(current);
+        } else {
+            return rotateLeft(current);
+        }
+    }
+
+    return current;
 }
 
 User* FindUser(Tree *t, int n){
@@ -106,10 +98,6 @@ User* FindMax(User *u){
     }
 
     return aux;
-}
-
-void InsertMovie(User*){
-    // em implementação
 }
 
 void DeleteUser(User **u){

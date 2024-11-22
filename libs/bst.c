@@ -1,6 +1,8 @@
 #include <string.h>
 
-#include "bst.h"
+#include "user.h"
+
+void SupBalanceTree(Tree**, User *u);
 
 Tree* Create(){
     Tree *newTree = (Tree *)malloc(sizeof(Tree));
@@ -37,4 +39,42 @@ void Delete(Tree **t){
     } else {
         DeleteUsers(&(*t)->root);
     }
+}
+
+int updateDegree(User* current){
+    if(current->nextL == NULL && current->nextR == NULL){
+        current->degree = 0;
+    } else if(current->nextL == NULL || current->nextR == NULL){
+        current->degree = (current->nextR == NULL) ? (current->nextL->degree + 1) : (current->nextR->degree + 1);
+    } else {
+        current->degree = (current->nextR > current->nextL) ? (current->nextR->degree + 1) : (current->nextL>degree + 1);
+    }
+
+    return current->degree;
+}
+
+User* rotateLeft(User* u){
+    User* sup = u->nextR;
+    User* aux = sup->nextL; 
+
+    sup->nextL = u;
+    u->nextR = aux;
+
+    u->degree = getDegree(u);
+    sup->degree = getDegree(sup);
+
+    return sup;
+}
+
+User* rotateRight(User* u){
+    User* sup = u->nextL;
+    User* aux = sup->nextR; 
+
+    sup->nextR = u;
+    u->nextL = aux;
+
+    u->degree = getDegree(u);
+    sup->degree = getDegree(sup);
+
+    return sup;
 }

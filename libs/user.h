@@ -5,7 +5,9 @@ typedef struct user{
     int numero_usp;
     char* nome;
 
+    int degree;
     struct user *nextL, *nextR;
+
     List *favoriteMovies;
 }User;
 
