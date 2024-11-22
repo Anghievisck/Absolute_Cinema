@@ -26,37 +26,90 @@ User* CreateUser(){
 
     u->nextL = NULL;
     u->nextR = NULL;
-    u->favoriteMovies = CreateList();
+    u->favoriteMovies = Create_List();
 
     return u;
 }
 
 // Cria um novo usuário e insere ele na árvore
-void InsertUser(Tree *t){
+int InsertUser(Tree *t){
     User *u = CreateUser();
 
+    if(FindUser(t, u->numero_usp) != NULL){
+        return -1;
+    }
+
     if(t == NULL){
-        return;
+        return 0;
     }
 
     if(t->root == NULL){
         t->root = u;
     } else if(t->root->numero_usp > u->numero_usp){
-        SupInsertUser(&t->root->nextL, u);
+        return SupInsertUser(&t->root->nextL, u);
     } else {
-        SupInsertUser(&t->root->nextR, u);
+        return SupInsertUser(&t->root->nextR, u);
     }
 }
 
-void SupInsertUser(User **current, User *u){
+int SupInsertUser(User **current, User *u){
     if(*current == NULL){
         *current = u;
-        return;
-    } else if((*current)->numero_usp > u->numero_usp){
-        SupInsertUser(&(*current)->nextL, u);
+        return 1;
     } else {
-        SupInsertUser(&(*current)->nextR, u);
+    *current = ((*current)->numero_usp > u->numero_usp) ? (*current)->nextL : (*current)->nextR;
+        return SupInsertUser(current, u);
     }
+}
+
+User* FindUser(Tree *t, int n){
+    if(t->root->numero_usp == n){
+        return t->root;
+    } else {
+        User *aux = (t->root->numero_usp > n) ? t->root->nextL : t->root->nextR;
+        if(aux == NULL){
+            return NULL;
+        }
+
+        return SupFindUser(aux, n);
+    }
+}
+
+User* SupFindUser(User* u, int n){
+    if(u->numero_usp == n){
+        return u;
+    } else {
+        u = (u->numero_usp > n) ? u->nextL : u->nextR;
+        if(u == NULL){
+            return NULL;
+        }
+
+        return SupFindUser(u, n);
+    }
+}
+
+User* FindMax(User *u){
+    User* aux = u->nextL;
+    while(aux != NULL){
+        if(aux->nextR != NULL){
+            User* sup = aux->nextR;
+            if(sup->nextR == NULL){
+                aux->nextR = sup->nextL;
+
+                return sup;
+            }
+        } else {
+            return aux;
+        }
+
+        aux = aux->nextR;
+    }
+
+    return aux;
+}
+
+void InsertMovie(User*){
+    // em implementação
 }
 
 void DeleteUser(User **u){
@@ -66,44 +119,30 @@ void DeleteUser(User **u){
 
     if((*u)->nextL == NULL && (*u)->nextR == NULL){
         free(u->name);
-        DeleteList(u->favoriteMovies);
+        DestroyList(u->favoriteMovies);
 
         free(u);
 
         return;
     } else if((*u)->nextL == NULL || (*u)->nextR == NULL){
         User *aux = ((*u)->nextL == NULL) ? (*u)->nextR : (*u)->nextL;
+    } else {
+        User *aux = FindMax((*u));
 
-        free((*u)->name);
-        DeleteList((*u)->favoriteMovies);
-        free((*u));
-
-        *u = aux;
-
-        return;
+        if(aux == NULL){
+            aux = (*u)->nextR;
+        }
     }
-
-    User *aux = FindMax((*u));
 
     if(aux == NULL){
         return;
     }
 
-    strcpy(u->name, aux->name);
-    u->numero_usp = aux->numero_usp;
-    u->favoriteMovies = aux->favoriteMovies;
+    free((*u)->name);
+    DestroyList((*u)->favoriteMovies);
+    free((*u));
 
-    free(aux->name);
-    DeleteList(aux)
-}
-
-User* FindMax(User *u){
-    User* aux = u->nextL;
-    while(aux->nextR != NULL){
-        aux = aux->nextR;
-    }
-
-    return aux;
+    *u = aux;
 }
 
 void DeleteUsers(User **u){
@@ -115,7 +154,7 @@ void DeleteUsers(User **u){
     DeleteUsers(&(*u)->nextR);
 
     free((*u)->name);
-    DeleteList(*u)->favoriteMovies);
+    DestroyList(*u)->favoriteMovies);
 
     free((*u));
     *u = NULL;

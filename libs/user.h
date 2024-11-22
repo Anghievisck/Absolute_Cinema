@@ -10,6 +10,8 @@ typedef struct user{
 }User;
 
 void InsertUser(Tree*);
-void DeleteUser(User **u);
-
 void InsertMovie(User*);
+
+User* FindUser(Tree*, int);
+
+void DeleteUser(User **u);
