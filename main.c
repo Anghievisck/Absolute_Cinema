@@ -22,8 +22,37 @@ User* CreateUser(){
 
     u->nextL = NULL;
     u->nextR = NULL;
+    u->degree = 0;
+
     // u->movies = Create_List();
-    u->degree = 1;
+    // if(u->movies == NULL){
+    //  printf("\nErro ao criar lista de filmes\n");
+    //  return NULL;
+    // }
+
+    // char option = 's';
+    // char *placeholder = (char*)malloc(sizeof(char) * 150);
+    // if(placeholder == NULL){
+    //  printf("\nErro ao criar o placeholder para o nome do filme\n");
+    //  return NULL;
+    // }
+    //
+    // int e;
+    //
+    // while(option != 'n' || option != 'N'){
+    //  printf("\nDigite o nome do filme: ");
+    //  getchar();
+    //  fgets(placeholder, 150, stdin);
+    //
+    //  InsertElem(n->movies, placeholder, &e); 
+    //  if(e != 0){
+    //      printf("\nErro ao adicionar o filme...\n");
+    //      return u;
+    //  }
+    //
+    //  printf("\nDeseja adicionar um novo filme? (S\n)\n>>> ");
+    //  scnaf("%c", &option);
+    // }
 
     return u;
 }
