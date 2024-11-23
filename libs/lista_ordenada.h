@@ -25,8 +25,8 @@ int search_elem(List *L, Elem X, int *erro);
 void remove_elem(List *L, Elem X, int *erro);
 
 
-List* CompareLists(List *L, List *G);
-List* MergeLists(List *L, List *G);
+List* CompareLists(List *L, List *G, int *erro);
+List* MergeLists(List *L, List *G, int *erro);
 
 void printList(List *L, int *erro);
 
