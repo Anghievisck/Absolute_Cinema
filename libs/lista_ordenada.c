@@ -1,5 +1,6 @@
 #include"lista_ordenada.h"
 
+//Inicializa a lista
 List* Create_list(int *erro) {
     *erro = 0;
     List *A = (List*) malloc(sizeof(List));
@@ -13,19 +14,20 @@ List* Create_list(int *erro) {
     return A;
 }
 
-
+//Verifica se a lista está vazia
 int isListEmpty(List *L) {
     if(L->inicio == NULL)
         return 1;
     return 0;
 }
 
+//Retorna a quantidade de elementos da lista
 int ListSize(List *L) {
     return L->tamanho;
 }
 
-
-void to_uppercase(Elem str) { // funcao auxiliar que transforma todos os chars em uppercase
+//funcao auxiliar que transforma todos os chars em uppercase
+void to_uppercase(Elem str) { 
     if (str == NULL) {
         return; // Handle NULL input
     }
@@ -38,7 +40,8 @@ void to_uppercase(Elem str) { // funcao auxiliar que transforma todos os chars e
     }
 }
 
-void to_uppercase_after_space(Elem str) { // funcao auxiliar que transforma todos os chars em uppercase
+//funcao auxiliar que transforma todos os chars após um espaço em uppercase
+void to_uppercase_after_space(Elem str) { 
     if (str == NULL) {
         return; // Handle NULL input
     }
@@ -58,7 +61,8 @@ void to_uppercase_after_space(Elem str) { // funcao auxiliar que transforma todo
     }
 }
 
-void to_lowercase(Elem str) { // funcao auxiliar que transforma todos os chars em lowercase
+//funcao auxiliar que transforma todos os chars em lowercase
+void to_lowercase(Elem str) { 
     if (str == NULL) {
         return; // Handle NULL input
     }
@@ -71,7 +75,7 @@ void to_lowercase(Elem str) { // funcao auxiliar que transforma todos os chars e
     }
 }
 
-
+//insere um novo elemento na lista de forma ordenada alfabeticamente
 void insert_elem(List *L, Elem X, int *erro) {
     *erro = 0;
     Node *new_node = (Node*) malloc(sizeof(Node));
@@ -81,10 +85,10 @@ void insert_elem(List *L, Elem X, int *erro) {
     }
     new_node->info = (Elem)malloc(strlen(X) + 1); //aloca a memoria necessaria (o tamanho da string mais o NULL terminator)
 
-    strcpy(new_node->info, X);
-    to_uppercase(new_node->info);
+    strcpy(new_node->info, X); //copia a string na variavel X para o novo bloco
+    to_uppercase(new_node->info); //transforma tudo em uppercase
 
-    if(isListEmpty(L)) {
+    if(isListEmpty(L)) { //se a lista estiver vazia, insere o elemento de forma especifica
         L->inicio = new_node;
         L->fim = new_node;
         new_node->prox = NULL;
@@ -93,22 +97,22 @@ void insert_elem(List *L, Elem X, int *erro) {
     }
 
     Node *aux = L->inicio;
-    while(aux != NULL) {
+    while(aux != NULL) { //se a lista nao estiver vazia, percorre a lista
         int v_comp = strcmp(new_node->info, aux->info);
 
         if(v_comp == 0) { //se a comparacao deu zero, significa que o elemento ja esta na lista
-            free(new_node->info);
+            free(new_node->info); //desaloca esse novo bloco
             free(new_node);
             *erro = 1;
             return;
         }
-        else if(v_comp < 0) { //se for menor que zero, significa q esta no mprimeiro lugar, por causa de como as proximas comparacoes sao feitas
+        else if(v_comp < 0) { //se for menor que zero, significa q esta no inicio da lista, por causa de como as proximas comparacoes sao feitas
             new_node->prox = L->inicio;
             L->inicio = new_node;
             L->tamanho = L->tamanho + 1;
             return;
         }
-        else {
+        else { //se a comparacao for maior que zero
             if(aux->prox == NULL) { //se o proximo do auxiliar eh NULL, significa que o aux eh o ultimo da lista
                 L->fim = new_node;
                 aux->prox = new_node;
@@ -129,35 +133,38 @@ void insert_elem(List *L, Elem X, int *erro) {
     }
 }
 
-
+//procura se o elemento está na lista
 int search_elem(List *L, Elem X, int *erro) {
     *erro = 0;
-    if(isListEmpty(L)) {
+    if(isListEmpty(L)) { //lista vazia
         *erro = 1;
         return 0;
     }
     
     Elem str = (Elem)malloc(strlen(X) + 1);
     strcpy(str, X);
-    to_uppercase(str);
+    to_uppercase(str); //transforma o input X em uppercase
 
     Node *aux = L->inicio;
     while(aux != NULL) {
         int v_comp = strcmp(str, aux->info);
-        if(v_comp == 0) {
+        printf("%d ", v_comp);
+        if(v_comp == 0) { //se encontrou o valor
             free(str);
             return 1;
         }
+        else if(v_comp < 0) //se alfabeticamente ja passou do elemento que esta sendo procurado
+            break;
         aux = aux->prox;
     }
     free(str);
     return 0;
 }
 
-
+//remove um elemento da lista ordenada
 void remove_elem(List *L, Elem X, int *erro) {
     *erro = 0;
-    if(isListEmpty(L)) {
+    if(isListEmpty(L)) { //lista vazia
         *erro = 1;
         return;
     }
@@ -166,15 +173,15 @@ void remove_elem(List *L, Elem X, int *erro) {
 
     Elem str = (Elem)malloc(strlen(X) + 1);
     strcpy(str, X);
-    to_uppercase(str);
+    to_uppercase(str); //transforma X em uppercase
 
-    if(strcmp(str, aux->info) != 0) {
-        while(aux->prox != NULL) {
+    if(strcmp(str, aux->info) != 0) { //se o inicio nao é o elemento a ser removido
+        while(aux->prox != NULL) { //percorre a lista toda
             int v_comp = strcmp(str, aux->prox->info);
-            if(v_comp == 0) {
+            if(v_comp == 0) { //se achou o elemento a ser removido
                 aux2 = aux->prox;
                 aux->prox = aux2->prox;
-                if(aux2 == L->fim) {
+                if(aux2 == L->fim) { //se o elemento era o fim da lista
                     L->fim = aux;
                 }
                 free(aux2->info);
@@ -183,13 +190,15 @@ void remove_elem(List *L, Elem X, int *erro) {
                 free(str);
                 return;
             }
+            else if (v_comp < 0) //se ja passou do elemento procurado, ou seja, o elemento a ser removido nao esta na lista
+                break;
             aux = aux->prox;
         }
         *erro = 1;
         free(str);
         return;
     }
-    else {
+    else { //se o inicio é o elemento a ser removido
         if(L->inicio == L->fim) {
             L->fim = NULL;
         }
@@ -204,6 +213,7 @@ void remove_elem(List *L, Elem X, int *erro) {
 
 }
 
+//imprime a lista ordenada em ordem alfabética
 void printList(List *L,int *erro) {
     *erro = 0;
     if(L == NULL || isListEmpty(L)) {
@@ -226,6 +236,7 @@ void printList(List *L,int *erro) {
     printf("\n");
 }
 
+//tira todos os elementos da lista
 void remove_all_nodes(List *L) {
     Node *aux1, *aux2;
     aux1 = L->inicio;
@@ -240,34 +251,36 @@ void remove_all_nodes(List *L) {
     L->tamanho = 0;
 }
 
+//Desaloca a lista inteira
 void DestroyList(List *L) {
     remove_all_nodes(L);
     free(L);
 }
 
-
+//retorna uma lista com a interseção das duas listas nos parametros
 List* CompareLists(List *L, List *G, int *erro) {
     Node *aux_L = L->inicio, *aux_G = G->inicio;
     List *C = Create_list(erro);
-    while(aux_L != NULL && aux_G != NULL) {
+    while(aux_L != NULL && aux_G != NULL) { //enquanto uma das listas nao acabar
         int v_comp = strcmp(aux_L->info, aux_G->info);
-        if(v_comp == 0) {
+        if(v_comp == 0) { //se os elementos sao iguais, adiciona-o a nova lista e passa para o proximo elemento nas duas listas
             insert_elem(C, aux_L->info, erro);
             aux_L = aux_L->prox;
             aux_G = aux_G->prox;
         }
-        else if(v_comp > 0) 
+        else if(v_comp > 0) //se o elemento da lista L for maior alfabeticamente que o da lista G, percorre 1 na lista G
             aux_G = aux_G->prox;
-        else   
+        else //similar ao else if anterior
             aux_L = aux_L->prox;
     }
     return C;
 }
 
+//retorna uma lista com a uniao das listas nos parametros
 List* MergeLists(List *L, List *G, int *erro) {
     Node *aux;
     List *M = Create_list(erro);
-    
+    //percorre as duas listas adicionando os elementos na nova lista. duplicatas sao tratadas na funcao insert_elem
     aux = L->inicio;
     while(aux != NULL) {
         insert_elem(M, aux->info, erro);
