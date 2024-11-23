@@ -58,7 +58,16 @@ User* CreateUser(){
 }
 
 void ExportTree(Tree *t){
-    
+    FILE *fh_output // File handler, modo de saída
+
+    fh_output = fopen("tree_data.txt", "w");
+
+    int placeholder = 0;
+    fprintf(fh_output, "a) Atualmente, a ABB possui um total de %d usuarios distintos\n", placeholder);
+    fprintf(fh_output, "b) Atualmente, a altura da ABB é %d\n", t->root->degree);
+    fprintf(fh_output, "c) Atualmente, a maior diferenca de alturas da ABB é de %d\n", placeholder);
+
+    fclose(fh_output);
 }
 
 int main(int argc, char* argv[]){
