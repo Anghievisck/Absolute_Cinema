@@ -7,11 +7,11 @@ typedef struct tree{
     User *root;
 }Tree;
 
-Tree* Create();
+Tree* CreateTree();
 int IsTreeEmpty(Tree*);
 void Delete(Tree**);
 
-void BalanceTree(Tree**);
+void BalanceTree(Tree**, int);
 User* RotateLeft(User*);
 User* RotateRight(User*);
 

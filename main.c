@@ -28,8 +28,12 @@ User* CreateUser(){
     return u;
 }
 
+void ExportTree(Tree *t){
+    
+}
+
 int main(int argc, char* argv[]){
-    Tree* t = Create();
+    Tree* t = CreateTree();
 
     if(t == NULL){
         printf("Deu erro");

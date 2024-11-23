@@ -21,7 +21,7 @@ void InsertUser(Tree **t, User *newUser, int *e){
     } else {
         *e = SupInsertUser(&(*t)->root, newUser);
         if(*e == 0){
-            BalanceTree(t);
+            BalanceTree(t, newUser->numero_usp);
             return;
         } else {
             *e = status;

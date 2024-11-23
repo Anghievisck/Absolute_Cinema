@@ -54,21 +54,24 @@ int GetBalance(User *u){
     }
 }
 
-void BalanceTree(Tree **t){
+void BalanceTree(Tree **t, int n){
     if(t == NULL || *t == NULL){
         return;
     }
 
-    BalanceSubtree(&(*t)->root);
+    BalanceSubtree(&(*t)->root, n);
 }
 
-void BalanceSubtree(User **u){
+void BalanceSubtree(User **u, int n){
     if(u == NULL || *u == NULL){
         return;
     }
 
-    BalanceSubtree(&(*u)->nextL);
-    BalanceSubtree(&(*u)->nextR);
+    if(n > (*u)->numero_usp){
+        BalanceSubtree(&(*u)->nextR);
+    } else {
+        BalanceSubtree(&(*u)->nextL);
+    }
 
     (*u)->degree = UpdateDegree((*u));
 
