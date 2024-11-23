@@ -43,7 +43,11 @@ int main() {
     insert_elem(L, "cu", &erro);
     insert_elem(L, "pinto", &erro);
     insert_elem(L, "mijo", &erro);
-    printf("%d encontrou mijo\n", search_elem(L, "mijo", &erro));
-    printf("%d encontrou xoxota\n", search_elem(L, "xoxota", &erro));
-    printList(L);
+    printList(L, &erro);
+    remove_elem(L, "mijo", &erro);
+    remove_elem(L, "xixi", &erro);
+    printList(L, &erro);
+    remove_all_nodes(L);
+    printf("%d", isListEmpty(L));
+    DestroyList(L);
 }

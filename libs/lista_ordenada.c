@@ -49,7 +49,9 @@ void insert_elem(List *L, Elem X, int *erro) {
         int v_comp = strcmp(new_node->info, aux->info);
 
         if(v_comp == 0) { //se a comparacao deu zero, significa que o elemento ja esta na lista
+            free(new_node->info);
             free(new_node);
+            *erro = 1;
             return;
         }
         else if(v_comp < 0) { //se for menor que zero, significa q esta no mprimeiro lugar, por causa de como as proximas comparacoes sao feitas
@@ -79,6 +81,7 @@ void insert_elem(List *L, Elem X, int *erro) {
     }
 }
 
+
 int search_elem(List *L, Elem X, int *erro) {
     *erro = 0;
     if(isListEmpty(L)) {
@@ -94,17 +97,81 @@ int search_elem(List *L, Elem X, int *erro) {
         }
         aux = aux->prox;
     }
+    return 0;
 }
 
 
-//void remove_elem(List *L, Elem X, int *erro) {
+void remove_elem(List *L, Elem X, int *erro) {
+    *erro = 0;
+    if(isListEmpty(L)) {
+        *erro = 1;
+        return;
+    }
+    Node *aux, *aux2;
+    aux = L->inicio;
 
-//}
+    if(strcmp(X, aux->info) != 0) {
+        while(aux->prox != NULL) {
+            int v_comp = strcmp(X, aux->prox->info);
+            if(v_comp == 0) {
+                aux2 = aux->prox;
+                aux->prox = aux2->prox;
+                if(aux2 == L->fim) {
+                    L->fim = aux;
+                }
+                free(aux2->info);
+                free(aux2);
+                L->tamanho = L->tamanho - 1;
+                return;
+            }
+            aux = aux->prox;
+        }
+        *erro = 1;
+        return;
+    }
+    else {
+        if(L->inicio == L->fim) {
+            L->fim = NULL;
+        }
+        L->inicio = aux->prox;
+        free(aux->info);
+        free(aux);
+        L->tamanho = L->tamanho - 1;
+        return;
+    }
+    
 
-void printList(List *L) {
+}
+
+void printList(List *L,int *erro) {
+    *erro = 0;
+    if(L == NULL || isListEmpty(L)) {
+        *erro = 1;
+        return;
+    }
     Node *aux = L->inicio;
     while(aux != NULL) {
         printf("%s\n", aux->info);
         aux = aux->prox;
     }
+    printf("\n");
+}
+
+void remove_all_nodes(List *L) {
+    Node *aux1, *aux2;
+    aux1 = L->inicio;
+    while (aux1 != NULL) {
+        aux2 = aux1->prox;
+        free(aux1->info);
+        free(aux1);
+        aux1 = aux2;
+    }
+    L->inicio = NULL;
+    L->fim = NULL;
+    L->tamanho = 0;
+}
+
+void DestroyList(List *L) {
+    remove_all_nodes(L);
+    free(L);
 }

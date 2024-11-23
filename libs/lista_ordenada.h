@@ -26,7 +26,9 @@ void remove_elem(List *L, Elem X, int *erro);
 
 
 List* CompareLists(List *L, List *G);
+List* MergeLists(List *L, List *G);
 
-void printList(List *L);
+void printList(List *L, int *erro);
 
+void remove_all_nodes(List *L);
 void DestroyList(List *L);
