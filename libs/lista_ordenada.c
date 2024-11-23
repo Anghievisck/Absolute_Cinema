@@ -26,13 +26,13 @@ int ListSize(List *L) {
 
 
 void insert_elem(List *L, Elem X, int *erro) {
-    //*erro = 0;
+    *erro = 0;
     Node *new_node = (Node*) malloc(sizeof(Node));
     if(new_node == NULL) {
         *erro = 1;
-        printf("jesus\n");
         return;
     }
+    new_node->info = (Elem)malloc(sizeof(char)*50);
 
     strcpy(new_node->info, X);
 
@@ -78,57 +78,6 @@ void insert_elem(List *L, Elem X, int *erro) {
         }
     }
 }
-/*void insert_elem(List *L, Elem X, int *erro) {
-    *erro = 0;
-    Node *new_node = (Node*) malloc(sizeof(Node));
-    if(new_node == NULL) {
-        *erro = 1;
-        new_node = (Node*) malloc(sizeof(Node));
-        return;
-    }
-    strcpy(new_node->info, X);
-
-    if(isListEmpty(L)) {
-        L->inicio = new_node;
-        L->fim = new_node;
-        new_node->prox = NULL;
-    }
-    else {
-        Node *aux = L->inicio;
-        int v_comp;
-        while(aux != NULL) {
-            v_comp = strcmp(new_node->info, aux->info);
-
-            if(v_comp == 0) {//se for igual a zero, significa que o filme ja está na lista
-                *erro = 1;
-                free(new_node);
-                return;
-            }
-            else if(v_comp > 0) { //significa que alfabeticamente, a string do new_node é depois
-                if(aux->prox == NULL) { //se o próximo for null, significa q é o ultimo elemento da lista
-                    aux->prox = new_node;
-                    L->fim = new_node;
-                    new_node->prox = NULL;
-                    break;
-                }
-                else if(strcmp(new_node->info, aux->prox->info) < 0) {//significa que o new_node é anterior ao próximo elemento de aux
-                    new_node->prox = aux->prox;
-                    aux->prox = new_node;
-                    break;
-                }
-            }
-            else { //se o new_node é o novo primeiro da lista
-                new_node->prox = L->inicio;
-                L->inicio = new_node;
-                break;
-            }
-
-            aux = aux->prox;
-        }
-    }
-    L->tamanho = L->tamanho + 1;
-}*/
-
 
 int search_elem(List *L, Elem X, int *erro) {
     *erro = 0;
@@ -138,13 +87,10 @@ int search_elem(List *L, Elem X, int *erro) {
     }
     
     Node *aux = L->inicio;
-    int v_comp = strcmp(X, aux->info);
     while(aux != NULL) {
+        int v_comp = strcmp(X, aux->info);
         if(v_comp == 0) {
             return 1;
-        }
-        else if(v_comp > 0) {
-            return 0;
         }
         aux = aux->prox;
     }
