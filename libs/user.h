@@ -1,7 +1,7 @@
 #ifndef USER_H
 #define USER_H
 
-
+typedef struct list List;
 typedef struct tree Tree;
 
 typedef struct user{
