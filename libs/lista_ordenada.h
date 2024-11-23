@@ -5,17 +5,23 @@
 
 typedef char* Elem;
 
+enum tipo { //lista única guarda apenas uma cópia do elemento. tipo Peso guarda a quantidade de vezes que esse elemento foi adicionado
+    UNICA = 0,
+    PESOS = 1
+};
+
 typedef struct no {
     Elem info;
+    int qnt_igual;
     struct no *prox;
 } Node;
 
 typedef struct list {
     Node *inicio, *fim;
-    int tamanho;
+    int tamanho, tipo;
 } List;
 
-List* Create_list(int *erro);
+List* Create_list(int type, int *erro);
 
 int isListEmpty(List *L);
 int ListSize(List *L);

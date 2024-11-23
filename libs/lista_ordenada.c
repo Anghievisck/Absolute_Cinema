@@ -1,7 +1,7 @@
 #include"lista_ordenada.h"
 
 //Inicializa a lista
-List* Create_list(int *erro) {
+List* Create_list(int type, int *erro) {
     *erro = 0;
     List *A = (List*) malloc(sizeof(List));
     if(A == NULL) {
@@ -11,6 +11,7 @@ List* Create_list(int *erro) {
     A->inicio = NULL;
     A->fim = NULL;
     A->tamanho = 0;
+    A->tipo = type;
     return A;
 }
 
@@ -84,9 +85,9 @@ void insert_elem(List *L, Elem X, int *erro) {
         return;
     }
     new_node->info = (Elem)malloc(strlen(X) + 1); //aloca a memoria necessaria (o tamanho da string mais o NULL terminator)
-
     strcpy(new_node->info, X); //copia a string na variavel X para o novo bloco
     to_uppercase(new_node->info); //transforma tudo em uppercase
+    new_node->qnt_igual = 1;
 
     if(isListEmpty(L)) { //se a lista estiver vazia, insere o elemento de forma especifica
         L->inicio = new_node;
@@ -103,7 +104,10 @@ void insert_elem(List *L, Elem X, int *erro) {
         if(v_comp == 0) { //se a comparacao deu zero, significa que o elemento ja esta na lista
             free(new_node->info); //desaloca esse novo bloco
             free(new_node);
-            *erro = 1;
+            if(L->tipo == UNICA)
+                *erro = 1;
+            else
+                aux->qnt_igual = aux->qnt_igual + 1;
             return;
         }
         else if(v_comp < 0) { //se for menor que zero, significa q esta no inicio da lista, por causa de como as proximas comparacoes sao feitas
@@ -133,7 +137,7 @@ void insert_elem(List *L, Elem X, int *erro) {
     }
 }
 
-//procura se o elemento está na lista
+//procura se o elemento está na lista. se for uma lista com pesos, retorna o peso
 int search_elem(List *L, Elem X, int *erro) {
     *erro = 0;
     if(isListEmpty(L)) { //lista vazia
@@ -151,7 +155,10 @@ int search_elem(List *L, Elem X, int *erro) {
         printf("%d ", v_comp);
         if(v_comp == 0) { //se encontrou o valor
             free(str);
-            return 1;
+            if(L->tipo == UNICA)
+                return 1;
+            else
+                return aux->qnt_igual;
         }
         else if(v_comp < 0) //se alfabeticamente ja passou do elemento que esta sendo procurado
             break;
@@ -161,7 +168,7 @@ int search_elem(List *L, Elem X, int *erro) {
     return 0;
 }
 
-//remove um elemento da lista ordenada
+//remove um elemento da lista ordenada. se for uma lista com pesos, subtrai um do peso do elemento
 void remove_elem(List *L, Elem X, int *erro) {
     *erro = 0;
     if(isListEmpty(L)) { //lista vazia
@@ -179,14 +186,18 @@ void remove_elem(List *L, Elem X, int *erro) {
         while(aux->prox != NULL) { //percorre a lista toda
             int v_comp = strcmp(str, aux->prox->info);
             if(v_comp == 0) { //se achou o elemento a ser removido
-                aux2 = aux->prox;
-                aux->prox = aux2->prox;
-                if(aux2 == L->fim) { //se o elemento era o fim da lista
-                    L->fim = aux;
+                if(L->tipo == PESOS && aux->prox->qnt_igual > 1) //se for com peso e o peso for maior que 1
+                    aux->prox->qnt_igual = aux->prox->qnt_igual - 1; //apenas subtrai o peso
+                else { //caso contrario, remove o nó
+                    aux2 = aux->prox;
+                    aux->prox = aux2->prox;
+                    if(aux2 == L->fim) //se o elemento era o fim da lista
+                        L->fim = aux;
+                    L->tamanho = L->tamanho - 1;
+                    free(aux2->info);
+                    free(aux2);
                 }
-                free(aux2->info);
-                free(aux2);
-                L->tamanho = L->tamanho - 1;
+                
                 free(str);
                 return;
             }
@@ -199,18 +210,20 @@ void remove_elem(List *L, Elem X, int *erro) {
         return;
     }
     else { //se o inicio é o elemento a ser removido
-        if(L->inicio == L->fim) {
-            L->fim = NULL;
+        if(L->tipo == PESOS && aux->qnt_igual > 1) //se for com peso e o peso for maior que 1
+            aux->qnt_igual = aux->qnt_igual - 1; //apenas subtrai o peso
+        else {
+            if(L->inicio == L->fim) {
+                L->fim = NULL;
+            }
+            L->inicio = aux->prox;
+            free(aux->info);
+            free(aux);
+            L->tamanho = L->tamanho - 1;
         }
-        L->inicio = aux->prox;
-        free(aux->info);
-        free(aux);
-        L->tamanho = L->tamanho - 1;
         free(str);
         return;
     }
-    
-
 }
 
 //imprime a lista ordenada em ordem alfabética
@@ -257,10 +270,10 @@ void DestroyList(List *L) {
     free(L);
 }
 
-//retorna uma lista com a interseção das duas listas nos parametros
+//retorna uma lista ordenada sem pesos com a interseção das duas listas nos parametros
 List* CompareLists(List *L, List *G, int *erro) {
     Node *aux_L = L->inicio, *aux_G = G->inicio;
-    List *C = Create_list(erro);
+    List *C = Create_list(0, erro);
     while(aux_L != NULL && aux_G != NULL) { //enquanto uma das listas nao acabar
         int v_comp = strcmp(aux_L->info, aux_G->info);
         if(v_comp == 0) { //se os elementos sao iguais, adiciona-o a nova lista e passa para o proximo elemento nas duas listas
@@ -276,10 +289,10 @@ List* CompareLists(List *L, List *G, int *erro) {
     return C;
 }
 
-//retorna uma lista com a uniao das listas nos parametros
+//retorna uma lista com pesos com a uniao das listas nos parametros
 List* MergeLists(List *L, List *G, int *erro) {
     Node *aux;
-    List *M = Create_list(erro);
+    List *M = Create_list(1, erro);
     //percorre as duas listas adicionando os elementos na nova lista. duplicatas sao tratadas na funcao insert_elem
     aux = L->inicio;
     while(aux != NULL) {
