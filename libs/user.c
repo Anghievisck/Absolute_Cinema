@@ -1,57 +1,53 @@
-#include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
+#include "bst.h"
 #include "user.h"
 
-void DeleteUsers(User **u);
-User* FindMax(User *u);
+User* FindMax(User*);
+int SupInsertUser(User**, User*);
+User* SupFindUser(User*, int);
 
-User* InsertUser(Tree *t, User *newUser){
-    return SupInsertUser(t->root, newUser);
+void InsertUser(Tree **t, User *newUser, int *e){
+    if(t == NULL || (*t) == NULL){
+        *e = -1;
+        return;
+    }
+
+    if((*t)->root == NULL){
+        (*t)->root = newUser;
+        *e = 0;
+        return;
+    } else {
+        *e = SupInsertUser(&(*t)->root, newUser);
+        if(*e == 0){
+            BalanceTree(t);
+            return;
+        } else {
+            *e = status;
+            return;
+        }
+    }
 }
 
-User* SupInsertUser(User *current, User *newUser){
+int SupInsertUser(User **current, User *newUser){
     if(current == NULL){
-        return newUser;
+        return -1;
     }
 
-    if(current->numero_usp > newUser->numero_usp){
-        current->nextL = InsertUser(current->nextL, newUser);
-    } else if(current->numero_usp < newUser->numero_usp) {
-        current->nextR = InsertUser(current->nextR, newUser);
+    if((*current) == NULL){
+        (*current) = newUser;
+
+        return 0;
     } else {
-        return current;
-    }
-
-    int balance;
-    if(current->nextL == NULL && current->nextR == NULL){
-        current->degree = 0;
-        balance = 0;
-    } else if(current->nextL == NULL || current->nextR == NULL){
-        current->degree = (current->nextR == NULL) ? (current->nextL->degree + 1) : (current->nextR->degree + 1);
-        balance = (current->nextR == NULL) ? (current->degree - 0) :  (0 - current->degree);
-    } else {
-        current->degree = (current->nextR > current->nextL) ? (current->nextR->degree + 1) : (current->nextL>degree + 1);
-        balance = current->nextL->degree - current->nextR->degree;
-    }
-
-    if(balance > 1){
-        if(newUser->numero_usp < current->nextL->numero_usp){
-            return rotateRight(current);
+        if(newUser->numero_usp < (*current)->numero_usp){
+            return SupInsertUser(&(*current)->nextL, newUser);
+        } else if(newUser->numero_usp > (*current)->numero_usp){
+            return SupInsertUser(&(*current)->nextR, newUser);
         } else {
-            current->nextL = rotateLeft(current->nextL);
-            return rotateRight(current);
-        }
-    } else if(balance < -1){
-        if(newUser->numero_usp < current->nextR->numero_usp){
-            current->nextR = rotateRight(current->rotateRight);
-            return rotateLeft(current);
-        } else {
-            return rotateLeft(current);
+            return 1;
         }
     }
-
-    return current;
 }
 
 User* FindUser(Tree *t, int n){
@@ -104,18 +100,21 @@ void DeleteUser(User **u){
     if(u == NULL || *u == NULL){
         return;
     }
+    
+    User *aux;
 
     if((*u)->nextL == NULL && (*u)->nextR == NULL){
-        free(u->name);
-        DestroyList(u->favoriteMovies);
+        free((*u)->nome);
+        //        DestroyList(u->favoriteMovies);
 
+        free(*u);
         free(u);
 
         return;
     } else if((*u)->nextL == NULL || (*u)->nextR == NULL){
-        User *aux = ((*u)->nextL == NULL) ? (*u)->nextR : (*u)->nextL;
+        aux = ((*u)->nextL == NULL) ? (*u)->nextR : (*u)->nextL;
     } else {
-        User *aux = FindMax((*u));
+        aux = FindMax((*u));
 
         if(aux == NULL){
             aux = (*u)->nextR;
@@ -126,8 +125,8 @@ void DeleteUser(User **u){
         return;
     }
 
-    free((*u)->name);
-    DestroyList((*u)->favoriteMovies);
+    free((*u)->nome);
+    //    DestroyList((*u)->favoriteMovies);
     free((*u));
 
     *u = aux;
@@ -141,8 +140,8 @@ void DeleteUsers(User **u){
     DeleteUsers(&(*u)->nextL);
     DeleteUsers(&(*u)->nextR);
 
-    free((*u)->name);
-    DestroyList(*u)->favoriteMovies);
+    free((*u)->nome);
+    //    DestroyList(*u)->favoriteMovies);
 
     free((*u));
     *u = NULL;

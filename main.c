@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "libs/user.h"
+#include "libs/bst.h"
 
 User* CreateUser(){
     User *u = (User*)malloc(sizeof(User));
@@ -13,22 +14,31 @@ User* CreateUser(){
     printf("Insira o seu numero USP: ");
     scanf("%d", &u->numero_usp);
 
-    u->name = (char *)malloc(sizeof(char) * 150);
+    u->nome = (char *)malloc(sizeof(char) * 150);
 
     printf("Insira seu nome: ");
     getchar();
-    fgets(u->name, 150, stdin);
+    fgets(u->nome, 150, stdin);
 
     u->nextL = NULL;
     u->nextR = NULL;
-    u->favoriteMovies = Create_List();
+    // u->movies = Create_List();
     u->degree = 1;
 
     return u;
 }
 
 int main(int argc, char* argv[]){
-    printf("test");
+    Tree* t = Create();
+
+    if(t == NULL){
+        printf("Deu erro");
+        return -1;
+    }
+
+    User* newUser = CreateUser();
+    printf("Test: %d\n", newUser->numero_usp);
+    printf("Test: %s", newUser->nome);
 
     return 0;
 }

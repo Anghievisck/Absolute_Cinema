@@ -1,19 +1,23 @@
-#include "bst.h"
-#include "lista_ordenada.h"
+#ifndef USER_H
+#define USER_H
+
+typedef struct tree Tree;
 
 typedef struct user{
     int numero_usp;
     char* nome;
 
-    int degree;
+    int grau;
     struct user *nextL, *nextR;
 
-    List *favoriteMovies;
+    List *movies;
 }User;
 
-void InsertUser(Tree*);
-void InsertMovie(User*);
+void InsertUser(Tree**, User*, int*);
 
 User* FindUser(Tree*, int);
 
-void DeleteUser(User **u);
+void DeleteUser(User **);
+void DeleteUsers(User **);
+
+#endif
