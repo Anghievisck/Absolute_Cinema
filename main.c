@@ -58,7 +58,7 @@ User* CreateUser(){
 }
 
 void ExportTree(Tree *t){
-    FILE *fh_output // File handler, modo de saída
+    FILE *fh_output; // File handler, modo de saída
 
     fh_output = fopen("tree_data.txt", "w");
 
