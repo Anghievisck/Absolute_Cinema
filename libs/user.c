@@ -208,11 +208,6 @@ int Similar_User_Sup(User* user, User* atual){
     //Cria lista qua guarda a intesecção
     List *pretendentes;
     int erro;
-    pretendentes = Create_list(0, &erro);
-    if(pretendentes == NULL){
-        return(0);
-    }
-    //Faz a intesecão
     pretendentes = CompareLists(user->movies, atual->movies, &erro);
     if(pretendentes == NULL){
         return(0);
