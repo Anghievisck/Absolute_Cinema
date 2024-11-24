@@ -11,7 +11,7 @@ Tree* CreateTree();
 int IsTreeEmpty(Tree*);
 void Delete(Tree**);
 
-void BalanceTree(Tree**, int);
+void BalanceTree(Tree**, int n);
 User* RotateLeft(User*);
 User* RotateRight(User*);
 

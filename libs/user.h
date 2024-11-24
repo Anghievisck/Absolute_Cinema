@@ -1,13 +1,14 @@
 #ifndef USER_H
 #define USER_H
 
+typedef struct list List;
 typedef struct tree Tree;
 
 typedef struct user{
     int numero_usp;
     char* nome;
 
-    int grau;
+    int degree;
     struct user *nextL, *nextR;
 
     List *movies;

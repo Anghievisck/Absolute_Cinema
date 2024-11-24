@@ -6,7 +6,7 @@
 
 void SupPrintUsers(User*);
 
-void BalanceSubtree(User**);
+void BalanceSubtree(User**, int n);
 int UpdateDegree(User*);
 
 Tree* Create(){
@@ -68,9 +68,9 @@ void BalanceSubtree(User **u, int n){
     }
 
     if(n > (*u)->numero_usp){
-        BalanceSubtree(&(*u)->nextR);
+        BalanceSubtree(&(*u)->nextR, n);
     } else {
-        BalanceSubtree(&(*u)->nextL);
+        BalanceSubtree(&(*u)->nextL, n);
     }
 
     (*u)->degree = UpdateDegree((*u));
@@ -142,7 +142,7 @@ void SupPrintUsers(User *u){
         return;
     } else {
         SupPrintUsers(u->nextL);
-        printf("Numero USP: %d | Nome: %s", u->numero_usp, n->nome);
+        printf("Numero USP: %d | Nome: %s", u->numero_usp, u->nome);
         printf("\nFilmes: \n");
 
         /*

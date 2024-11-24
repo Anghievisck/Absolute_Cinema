@@ -17,15 +17,10 @@ void InsertUser(Tree **t, User *newUser, int *e){
     if((*t)->root == NULL){
         (*t)->root = newUser;
         *e = 0;
-        return;
     } else {
         *e = SupInsertUser(&(*t)->root, newUser);
         if(*e == 0){
             BalanceTree(t, newUser->numero_usp);
-            return;
-        } else {
-            *e = status;
-            return;
         }
     }
 }
