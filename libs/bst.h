@@ -7,7 +7,7 @@ typedef struct tree{
     User *root;
 }Tree;
 
-Tree* CreateTree();
+Tree* CreateTree(int*);
 int IsTreeEmpty(Tree*);
 void Delete(Tree**);
 

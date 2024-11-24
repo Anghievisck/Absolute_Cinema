@@ -3,10 +3,28 @@
 
 #include "bst.h"
 #include "user.h"
+#include "lista_ordenada.h"
 
 User* FindMax(User*);
 int SupInsertUser(User**, User*);
 User* SupFindUser(User*, int);
+
+User* CreateUser(int n_USP, char* name, List *L, int *erro) {
+    *erro = 0;
+    User *u = (User*)malloc(sizeof(User));
+    if(u == NULL)
+        *erro = 1;
+    u->degree = 0;
+    u->nextL = NULL;
+    u->nextR = NULL;
+    u->nome = (char*) malloc(strlen(name) + 1);
+    strcpy(u->nome, name);
+    u->numero_usp = n_USP;
+    u->movies = L;
+
+    return u;
+}
+
 
 void InsertUser(Tree **t, User *newUser, int *e){
     if(t == NULL || (*t) == NULL){

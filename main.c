@@ -3,57 +3,61 @@
 
 #include "libs/user.h"
 #include "libs/bst.h"
+#include "libs/lista_ordenada.h"
 
-User* CreateUser(){
-    User *u = (User*)malloc(sizeof(User));
-
-    if(u == NULL){
-        return NULL;
-    }
+User* Cria_usuario() {
+    int n_USP, erro, contador = 1;
+    char* name = (char*)malloc(sizeof(char)*150);
 
     printf("Insira o seu numero USP: ");
-    scanf("%d", &u->numero_usp);
-
-    u->nome = (char *)malloc(sizeof(char) * 150);
+    scanf("%d", &n_USP);
 
     printf("Insira seu nome: ");
     getchar();
-    fgets(u->nome, 150, stdin);
+    fgets(name, 150, stdin);
 
-    u->nextL = NULL;
-    u->nextR = NULL;
-    u->degree = 0;
+    List *L = Create_list(UNICA, &erro);
+    if(erro){
+        printf("\nErro ao criar lista de filmes\n");
+        free(name);
+        return NULL;
+    }
 
-    // u->movies = Create_List();
-    // if(u->movies == NULL){
-    //  printf("\nErro ao criar lista de filmes\n");
-    //  return NULL;
-    // }
-
-    // char option = 's';
-    // char *placeholder = (char*)malloc(sizeof(char) * 150);
-    // if(placeholder == NULL){
-    //  printf("\nErro ao criar o placeholder para o nome do filme\n");
-    //  return NULL;
-    // }
-    //
-    // int e;
-    //
-    // while(option != 'n' || option != 'N'){
-    //  printf("\nDigite o nome do filme: ");
-    //  getchar();
-    //  fgets(placeholder, 150, stdin);
-    //
-    //  InsertElem(n->movies, placeholder, &e); 
-    //  if(e != 0){
-    //      printf("\nErro ao adicionar o filme...\n");
-    //      return u;
-    //  }
-    //
-    //  printf("\nDeseja adicionar um novo filme? (S\n)\n>>> ");
-    //  scnaf("%c", &option);
-    // }
-
+    char option = 's';
+    char *placeholder = (char*)malloc(sizeof(char) * 150);
+    *placeholder = 'a';
+    if(placeholder == NULL){
+        printf("\nErro ao criar o placeholder para o nome do filme\n");
+        free(name);
+        free(placeholder);
+        return NULL;
+    }
+    
+    while(option != 'n' && option != 'N'){
+        printf("\nDigite o nome do filme: ");
+        if(contador != 1)
+            getchar();
+        fgets(placeholder, 150, stdin);
+    
+        insert_elem(L, placeholder, &erro); 
+        if(erro){
+            printf("\nErro ao adicionar o filme...\n");
+            free(name);
+            free(placeholder);
+            return NULL;
+        }
+    
+        printf("\nDeseja adicionar um novo filme? (S/N)\n>>> ");
+        scanf("%c", &option);
+        contador++;
+    }
+    User *u = CreateUser(n_USP, name, L, &erro);
+    free(name);
+    free(placeholder);
+    if(erro){
+        printf("\nErro ao criar o usuario\n");
+        return NULL;
+    }
     return u;
 }
 
@@ -90,18 +94,52 @@ typedef enum {
 
 
 int main(int argc, char* argv[]){
-
-
-    Tree* t = CreateTree();
-
-    if(t == NULL){
-        printf("Deu erro");
+    int erro, loop = 1, acao;
+    Tree* t = CreateTree(&erro);
+    if(erro){
+        printf("Não foi possivel criar o sistema");
         return -1;
     }
 
-    User* newUser = CreateUser();
-    printf("Test: %d\n", newUser->numero_usp);
-    printf("Test: %s", newUser->nome);
+    while(loop) {
+        printf("\n ==========================\n");
+        printf("       Menu Principal     ");
+        printf("\n ==========================\n");
+        printf("1. Cadastrar usuario\n");
+        printf("2. Listar alunos do sistema\n");
+        printf("3. Buscar aluno no sistema\n");
+        printf("4. Listar todos os filme preferidos pelos alunos\n");
+        printf("5. Buscar filme e pessoas que gostam dele\n");
+        printf("6. Ver filme novo (buscar sugestoes de colegas)\n");
+        printf("7. Sugestao de filme muito diferente\n");
+        printf("8. Gerar arquivo de texto com todas as informações do sistema\n");
+        printf("9.a. Quantidade de nos na arvore do sistema\n");
+        printf("9.b. Altura da arvore do sistema\n");
+        printf("9.c. Maior diferenca  entre alturas que existe entre as sub-árvores de algum nó da árvore\n");
+        printf("10. Retirar cadastro de um usuário\n");
+        printf("11. Remover filme da lista de um usuário\n");
+        printf("12. Listar filmes mais queridos\n");
+        printf("13. Reiniciar o sistema (apagar todas as informacoes\n");
+        printf("14. Fechar o programa\n");
 
+        printf(" O que deseja fazer? ");
+        scanf(" %d", &acao);
+        acao--;
+
+        printf("\n");
+
+        switch(acao) {
+            case NOVO_CADASTRO:
+                InsertUser(&t, Cria_usuario(), &erro);
+                if(erro != 0) 
+                    printf("\nErro ao colocar o usuario na arvore\n");
+            break;
+            case LISTAR_TODOS_ALUNOS:
+                PrintTree(t);
+            break;
+            case BUSCAR_USUARIO:
+                printf("Digite o número USP da pessoa que deseja buscar:\n");
+        }
+    }
     return 0;
 }

@@ -3,20 +3,22 @@
 
 #include "bst.h"
 #include "user.h"
+#include "lista_ordenada.h"
 
 void SupPrintUsers(User*);
 
 void BalanceSubtree(User**, int n);
 int UpdateDegree(User*);
 
-Tree* Create(){
+Tree* CreateTree(int *e){
+    *e = 0;
     Tree *newTree = (Tree *)malloc(sizeof(Tree));
 
     if(newTree == NULL){
+        *e = 1;
         return NULL;
     } else {
         newTree->root = NULL;
-
         return newTree;
     }
 }
@@ -134,24 +136,18 @@ int UpdateDegree(User* current){
 }
 
 void PrintTree(Tree *t){
-    SubPrintUsers(t->root);
+    SupPrintUsers(t->root);
 }
 
 void SupPrintUsers(User *u){
+    int e;
     if(u == NULL){
         return;
     } else {
         SupPrintUsers(u->nextL);
         printf("Numero USP: %d | Nome: %s", u->numero_usp, u->nome);
         printf("\nFilmes: \n");
-
-        /*
-        Node *aux = n->movies->inicio;
-        for(int i = 0; i < ListSize(n->movies); i++){
-            printf("    %s\n", aux->info);
-            aux = aux->prox;
-        }
-        */
+        printList(u->movies, &e);
         SupPrintUsers(u->nextR);
     }
 }

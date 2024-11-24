@@ -1,9 +1,6 @@
 #include<stdlib.h>
 #include<stdio.h>
-#include<string.h>
-#include<ctype.h>
-
-typedef char* Elem;
+#include"string_auxiliar.h"
 
 enum tipo { //lista única guarda apenas uma cópia do elemento. tipo Peso guarda a quantidade de vezes que esse elemento foi adicionado
     UNICA = 0,
@@ -11,7 +8,7 @@ enum tipo { //lista única guarda apenas uma cópia do elemento. tipo Peso guard
 };
 
 typedef struct no {
-    Elem info;
+    Elem info; //tipo herdado de string_auxiliar.h
     int qnt_igual;
     struct no *prox;
 } Node;

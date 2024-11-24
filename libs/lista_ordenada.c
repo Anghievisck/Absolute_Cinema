@@ -27,55 +27,6 @@ int ListSize(List *L) {
     return L->tamanho;
 }
 
-//funcao auxiliar que transforma todos os chars em uppercase
-void to_uppercase(Elem str) { 
-    if (str == NULL) {
-        return; // Handle NULL input
-    }
-
-    Elem ptr = str; // salva o ponteiro original
-
-    while (*ptr != '\0') {
-        *ptr = toupper((unsigned char)*ptr); // converte caracteres para caixa alta
-        ptr++;
-    }
-}
-
-//funcao auxiliar que transforma todos os chars após um espaço em uppercase
-void to_uppercase_after_space(Elem str) { 
-    if (str == NULL) {
-        return; // Handle NULL input
-    }
-
-    Elem ptr = str; // salva o ponteiro original
-    int space = 1;
-    while (*ptr != '\0') {
-        if(space == 1) {
-            *ptr = toupper((unsigned char)*ptr); // converte caracteres para caixa alta
-            space = 0;
-        }
-        if(*ptr == ' ') {
-            space = 1;
-        }
-        
-        ptr++;
-    }
-}
-
-//funcao auxiliar que transforma todos os chars em lowercase
-void to_lowercase(Elem str) { 
-    if (str == NULL) {
-        return; // Handle NULL input
-    }
-
-    Elem ptr = str; // salva o ponteiro original
-
-    while (*ptr != '\0') {
-        *ptr = tolower((unsigned char)*ptr); // converte caracteres para caixa alta
-        ptr++;
-    }
-}
-
 //insere um novo elemento na lista de forma ordenada alfabeticamente
 void insert_elem(List *L, Elem X, int *erro) {
     *erro = 0;
@@ -87,6 +38,7 @@ void insert_elem(List *L, Elem X, int *erro) {
     new_node->info = (Elem)malloc(strlen(X) + 1); //aloca a memoria necessaria (o tamanho da string mais o NULL terminator)
     strcpy(new_node->info, X); //copia a string na variavel X para o novo bloco
     to_uppercase(new_node->info); //transforma tudo em uppercase
+    
     new_node->qnt_igual = 1;
 
     if(isListEmpty(L)) { //se a lista estiver vazia, insere o elemento de forma especifica
@@ -241,7 +193,7 @@ void printList(List *L,int *erro) {
         to_lowercase(str);
         to_uppercase_after_space(str);
 
-        printf("%s\n", str);
+        printf("%s", str);
         aux = aux->prox;
 
         free(str);
