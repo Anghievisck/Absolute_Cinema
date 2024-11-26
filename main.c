@@ -58,6 +58,7 @@ User* Cria_usuario() {
         printf("\nErro ao criar o usuario\n");
         return NULL;
     }
+    printf("d");
     return u;
 }
 
@@ -89,7 +90,9 @@ typedef enum {
     MAIOR_DIF_H_SUBARVORES,
     RETIRAR_CADASTRO,
     REMOVER_FILME,
-    FILMES_MAIS_QUERIDOS
+    FILMES_MAIS_QUERIDOS,
+    REINICIAR_SISTEMA,
+    FECHAR_PROGRAMA
 } OPTIONS;
 
 
@@ -113,14 +116,14 @@ int main(int argc, char* argv[]){
         printf("6. Ver filme novo (buscar sugestoes de colegas)\n");
         printf("7. Sugestao de filme muito diferente\n");
         printf("8. Gerar arquivo de texto com todas as informações do sistema\n");
-        printf("9.a. Quantidade de nos na arvore do sistema\n");
-        printf("9.b. Altura da arvore do sistema\n");
-        printf("9.c. Maior diferenca  entre alturas que existe entre as sub-árvores de algum nó da árvore\n");
-        printf("10. Retirar cadastro de um usuário\n");
-        printf("11. Remover filme da lista de um usuário\n");
-        printf("12. Listar filmes mais queridos\n");
-        printf("13. Reiniciar o sistema (apagar todas as informacoes\n");
-        printf("14. Fechar o programa\n");
+        printf("9. Quantidade de nos na arvore do sistema\n");
+        printf("10. Altura da arvore do sistema\n");
+        printf("11. Maior diferenca  entre alturas que existe entre as sub-árvores de algum nó da árvore\n");
+        printf("12. Retirar cadastro de um usuário\n");
+        printf("13. Remover filme da lista de um usuário\n");
+        printf("14. Listar filmes mais queridos\n");
+        printf("15. Reiniciar o sistema (apagar todas as informacoes\n");
+        printf("16. Fechar o programa\n");
 
         printf(" O que deseja fazer? ");
         scanf(" %d", &acao);
@@ -135,10 +138,15 @@ int main(int argc, char* argv[]){
                     printf("\nErro ao colocar o usuario na arvore\n");
             break;
             case LISTAR_TODOS_ALUNOS:
-                PrintTree(t);
+                PrintTree(t, "Numero USP", "Nome", "Filmes");
             break;
             case BUSCAR_USUARIO:
                 printf("Digite o número USP da pessoa que deseja buscar:\n");
+            break;
+            case FECHAR_PROGRAMA:
+                Delete(&t);
+                loop = 0;
+            break;
         }
     }
     return 0;

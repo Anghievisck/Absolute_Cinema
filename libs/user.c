@@ -118,7 +118,7 @@ void DeleteUser(User **u){
 
     if((*u)->nextL == NULL && (*u)->nextR == NULL){
         free((*u)->nome);
-        //        DestroyList(u->favoriteMovies);
+        DestroyList((*u)->movies);
 
         free(*u);
         free(u);

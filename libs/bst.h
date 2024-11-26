@@ -15,6 +15,6 @@ void BalanceTree(Tree**, int n);
 User* RotateLeft(User*);
 User* RotateRight(User*);
 
-void PrintTree(Tree*);
+void PrintTree(Tree*, char*, char*, char*);
 
 #endif

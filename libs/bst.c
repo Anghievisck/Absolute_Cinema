@@ -5,7 +5,7 @@
 #include "user.h"
 #include "lista_ordenada.h"
 
-void SupPrintUsers(User*);
+void SupPrintUsers(User*, char*, char*, char*);
 
 void BalanceSubtree(User**, int n);
 int UpdateDegree(User*);
@@ -135,19 +135,19 @@ int UpdateDegree(User* current){
     return current->degree;
 }
 
-void PrintTree(Tree *t){
-    SupPrintUsers(t->root);
+void PrintTree(Tree *t, char* p_number, char* p_string, char*p_list){
+    SupPrintUsers(t->root, p_number, p_string, p_list);
 }
 
-void SupPrintUsers(User *u){
+void SupPrintUsers(User *u, char* p_number, char* p_string, char* p_list){
     int e;
     if(u == NULL){
         return;
     } else {
-        SupPrintUsers(u->nextL);
-        printf("Numero USP: %d | Nome: %s", u->numero_usp, u->nome);
-        printf("\nFilmes: \n");
+        SupPrintUsers(u->nextL, p_number, p_string, p_list);
+        printf("%s: %d | %s: %s", p_number, u->numero_usp, p_string, u->nome);
+        printf("\n%s: \n", p_list);
         printList(u->movies, &e);
-        SupPrintUsers(u->nextR);
+        SupPrintUsers(u->nextR, p_number, p_string, p_list);
     }
 }
