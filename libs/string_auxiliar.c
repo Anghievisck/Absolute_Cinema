@@ -48,3 +48,29 @@ void to_lowercase(Elem str) {
         ptr++;
     }
 }
+
+int GetInteger(char* prompt, char* errorPrompt){
+    char* placeholder = (char*)malloc(sizeof(char) * LENGTH);
+
+    printf("%s", prompt);
+
+    fgets(placeholder, LENGTH, stdin);
+    //printf("placeholder: %s\n", placeholder);
+    //printf("*placeholder: %c\n", *placeholder);
+
+    //printf("Eh digito? %d\n", isdigit(*placeholder));
+
+    char* digits = (char*)malloc(strlen(placeholder)+1);
+
+    strcpy(digits, placeholder);
+    for(int i = 0; i < strlen(placeholder); i++){
+        if(!isdigit(*placeholder)){
+            printf("%s", errorPrompt);
+            return GetInteger(prompt, errorPrompt);
+        }
+
+        placeholder++;
+    }
+
+    return atoi(digits);
+}

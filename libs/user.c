@@ -15,6 +15,7 @@ User* CreateUser(int n_USP, char* name, List *L, int *erro) {
     if(u == NULL)
         *erro = 1;
     u->degree = 0;
+    u->fb = 0;
     u->nextL = NULL;
     u->nextR = NULL;
     u->nome = (char*) malloc(strlen(name) + 1);
@@ -25,6 +26,82 @@ User* CreateUser(int n_USP, char* name, List *L, int *erro) {
     return u;
 }
 
+void DD(User **r) {
+    User *pai = *r;
+    User *filho = pai->nextR;
+    pai->nextR = filho->nextL;
+    filho->nextL = pai;
+    pai->fb = 0;
+    filho->fb = 0;
+    *r = filho;
+}
+
+void EE(User **r) {
+    User *pai = *r;
+    User *filho = pai->nextL;
+    pai->nextL = filho->nextR;
+    filho->nextR = pai;
+    pai->fb = 0;
+    filho->fb = 0;
+    *r = filho;
+}
+
+void ED(User **r) {
+    User *pai = *r;
+    User *filho = pai->nextL;
+    User *neto = filho->nextR;
+    pai->nextL=neto->nextR;
+    filho->nextR = neto->nextL;
+    neto->nextL = filho;
+    neto->nextR = pai;
+    switch(neto->fb) {
+        case -1:
+            pai->fb = 1;
+            filho->fb = 0;
+            break;
+        case 0:
+            pai->fb = 0;
+            filho->fb = 0;
+            break;
+        case 1:
+            pai->fb = 0;
+            filho->fb = -1;
+            break;
+    }
+    neto->fb = 0;
+    *r = neto;
+}
+
+void DE(User **r) {
+    User *pai = *r;
+    User *filho = pai->nextR;
+    User *neto = filho->nextL;
+    pai->nextR=neto->nextL;
+    filho->nextL = neto->nextR;
+    neto->nextR = filho;
+    neto->nextL = pai;
+    switch(neto->fb) {
+        case 1:
+            pai->fb = -1;
+            filho->fb = 0;
+            break;
+        case 0:
+            pai->fb = 0;
+            filho->fb = 0;
+            break;
+        case -1:
+            pai->fb = 0;
+            filho->fb = 1;
+            break;
+    }
+    neto->fb = 0;
+    *r = neto;
+}
+
+/*void InsertUser(Tree **t, User *newUser, int *e) {
+    int cresceu;
+
+}*/
 
 void InsertUser(Tree **t, User *newUser, int *e){
     if(t == NULL || (*t) == NULL){

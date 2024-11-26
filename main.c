@@ -3,34 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#define LENGTH 100
-
-int GetInteger(char* prompt, char* errorPrompt){
-    char* placeholder = (char*)malloc(sizeof(char) * LENGTH);
-
-    printf("%s", prompt);
-
-    fgets(placeholder, LENGTH, stdin);
-    printf("placeholder: %s\n", placeholder);
-    printf("*placeholder: %c\n", *placeholder);
-
-    printf("Eh digito? %d\n", isdigit(*placeholder));
-
-    char* digits = (char*)malloc(sizeof(char)*strlen(placeholder));
-
-    strcpy(digits, placeholder);
-    for(int i = 0; i < strlen(placeholder); i++){
-        if(!isdigit(*placeholder)){
-            printf("%s", errorPrompt);
-            return GetInteger(prompt, errorPrompt);
-        }
-
-        placeholder++;
-    }
-
-    return atoi(digits);
-}
-
 #include "libs/user.h"
 #include "libs/bst.h"
 #include "libs/lista_ordenada.h"
@@ -42,7 +14,7 @@ User* Cria_usuario() {
     n_USP = GetInteger("Insira o seu numero USP: ", "O numero USP deve ser um numero...\n");
 
     printf("Insira seu nome: ");
-    getchar();
+    //getchar();
     fgets(name, 150, stdin);
 
     List *L = Create_list(UNICA, &erro);
@@ -155,7 +127,7 @@ int main(int argc, char* argv[]){
         printf("15. Reiniciar o sistema (apagar todas as informacoes\n");
         printf("16. Fechar o programa\n");
 
-        acao = GetInteger(" O que deseja fazer?", "Por favor, digite o NUMERO da acao...\n");
+        acao = GetInteger(" O que deseja fazer? ", "Por favor, digite o NUMERO da acao...\n");
         acao--;
 
         printf("\n");
@@ -169,7 +141,10 @@ int main(int argc, char* argv[]){
                 PrintTree(t, "Numero USP", "Nome", "Filmes");
             break;
             case BUSCAR_USUARIO:
-                printf("Digite o número USP da pessoa que deseja buscar:\n");
+                if (FindUser(t, GetInteger("Digite o Numero USP da pessoa que deseja procurar: ", "O numero USP deve ser um numero")) == NULL)
+                    printf("O usuario nao esta no sistema");
+                else
+                printf("O usuario esta no sistema");
             break;
             case FECHAR_PROGRAMA:
                 Delete(&t);
