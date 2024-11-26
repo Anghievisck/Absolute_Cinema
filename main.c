@@ -1,5 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define LENGTH 100
+
+int GetInteger(char* prompt, char* errorPrompt){
+    char* placeholder = (char*)malloc(sizeof(char) * LENGTH);
+
+    printf("%s", prompt);
+
+    fgets(placeholder, LENGTH, stdin);
+    printf("placeholder: %s\n", placeholder);
+    printf("*placeholder: %c\n", *placeholder);
+
+    printf("Eh digito? %d\n", isdigit(*placeholder));
+
+    char* digits = (char*)malloc(sizeof(char)*strlen(placeholder));
+
+    strcpy(digits, placeholder);
+    for(int i = 0; i < strlen(placeholder); i++){
+        if(!isdigit(*placeholder)){
+            printf("%s", errorPrompt);
+            return GetInteger(prompt, errorPrompt);
+        }
+
+        placeholder++;
+    }
+
+    return atoi(digits);
+}
 
 #include "libs/user.h"
 #include "libs/bst.h"
@@ -9,8 +39,7 @@ User* Cria_usuario() {
     int n_USP, erro, contador = 1;
     char* name = (char*)malloc(sizeof(char)*150);
 
-    printf("Insira o seu numero USP: ");
-    scanf("%d", &n_USP);
+    n_USP = GetInteger("Insira o seu numero USP: ", "O numero USP deve ser um numero...\n");
 
     printf("Insira seu nome: ");
     getchar();
@@ -51,6 +80,7 @@ User* Cria_usuario() {
         scanf("%c", &option);
         contador++;
     }
+
     User *u = CreateUser(n_USP, name, L, &erro);
     free(name);
     free(placeholder);
@@ -125,12 +155,10 @@ int main(int argc, char* argv[]){
         printf("15. Reiniciar o sistema (apagar todas as informacoes\n");
         printf("16. Fechar o programa\n");
 
-        printf(" O que deseja fazer? ");
-        scanf(" %d", &acao);
+        acao = GetInteger(" O que deseja fazer?", "Por favor, digite o NUMERO da acao...\n");
         acao--;
 
         printf("\n");
-
         switch(acao) {
             case NOVO_CADASTRO:
                 InsertUser(&t, Cria_usuario(), &erro);
@@ -146,6 +174,9 @@ int main(int argc, char* argv[]){
             case FECHAR_PROGRAMA:
                 Delete(&t);
                 loop = 0;
+            break;
+            default:
+                printf("Digite uma acao valida...\n");
             break;
         }
     }
