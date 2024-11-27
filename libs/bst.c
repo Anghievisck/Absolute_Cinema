@@ -22,7 +22,71 @@ Tree* CreateTree(int *e){
         return newTree;
     }
 }
-
+int insert(User **p, User *x){
+    int cresceu;
+    return(aux_insert(p, x, &cresceu));
+};
+//Obs como NO e elem é meio que a mesma bomba no caso User vou ter que dar uma alterada no codigo do prof 
+int aux_insert(User **p, User *x, int *cresceu){
+    if(*p == NULL){
+        *p = (User*)malloc(sizeof(User));
+        strcpy((*p)->nome, x->nome);
+        (*p)->numero_usp = x->numero_usp;
+        //copy_list((*p)->movies, x->movies) criar essa funçao
+        (*p)->fb = 0;
+        (*p)->nextL = (*p)->nextR = NULL;
+        *cresceu = 1;
+        return(1);
+    }else if( x->numero_usp == (*p) -> numero_usp){
+        return(0);
+    }else if( x->numero_usp < (*p) -> numero_usp){
+        if(aux_insert(&(*p)->nextL, x, cresceu)){
+            if(*cresceu){
+                switch((*p)->fb){
+                    case -1:
+                        if((*p)->nextL->fb == -1){
+                           //ee(p);
+                        }else{
+                           //ed(p);
+                        }
+                        *cresceu = 0;
+                        break;
+                    case 0:
+                        (*p)->fb = -1;
+                        *cresceu = 1;
+                        break;
+                    case 1:
+                        (*p)->fb = 0;
+                        *cresceu = 0;
+                        break;
+                }//fim do switch
+            }//fim do if
+        }else return(0);
+    }else if(x->numero_usp > (*p) -> numero_usp){
+        if(aux_insert(&(*p)->nextL, x, cresceu)){
+            if(*cresceu){
+                switch((*p)->fb){
+                    case -1:
+                        (*p)->fb = 0;
+                        *cresceu = 0;
+                        break;
+                    case 0:
+                        (*p)->fb = 1;
+                        *cresceu = 1;
+                        break;
+                    case 1:
+                        if((*p)->nextL->fb == -1){
+                           //dd(p);
+                        }else{
+                           //de(p);
+                        }
+                        *cresceu = 0;
+                        break;
+                }//fim do switch
+            }//fim do if
+        }else return(0);
+    }
+};
 /*
     Se a árvore existe, retorna 1 ou 0, respectivamente vazia ou
     não vazia, senão retorna -1.
