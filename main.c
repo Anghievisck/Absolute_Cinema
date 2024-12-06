@@ -60,7 +60,6 @@ User* Cria_usuario() {
         printf("\nErro ao criar o usuario\n");
         return NULL;
     }
-    printf("d");
     return u;
 }
 
@@ -133,23 +132,31 @@ int main(int argc, char* argv[]){
         printf("\n");
         switch(acao) {
             case NOVO_CADASTRO:
-                InsertUser(&t, Cria_usuario(), &erro);
+                insert_in_tree(&(t->root), Cria_usuario());
                 if(erro != 0) 
                     printf("\nErro ao colocar o usuario na arvore\n");
             break;
+
             case LISTAR_TODOS_ALUNOS:
                 PrintTree(t, "Numero USP", "Nome", "Filmes");
             break;
+
             case BUSCAR_USUARIO:
                 if (FindUser(t, GetInteger("Digite o Numero USP da pessoa que deseja procurar: ", "O numero USP deve ser um numero")) == NULL)
                     printf("O usuario nao esta no sistema");
                 else
                 printf("O usuario esta no sistema");
             break;
+
+            //case LISTAR_TODOS_FILMES:
+
+            //break;
+
             case FECHAR_PROGRAMA:
                 Delete(&t);
                 loop = 0;
             break;
+
             default:
                 printf("Digite uma acao valida...\n");
             break;

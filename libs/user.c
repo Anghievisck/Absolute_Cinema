@@ -6,7 +6,6 @@
 #include "lista_ordenada.h"
 
 User* FindMax(User*);
-int SupInsertUser(User**, User*);
 User* SupFindUser(User*, int);
 
 User* CreateUser(int n_USP, char* name, List *L, int *erro) {
@@ -24,120 +23,6 @@ User* CreateUser(int n_USP, char* name, List *L, int *erro) {
     u->movies = L;
 
     return u;
-}
-
-void DD(User **r) {
-    User *pai = *r;
-    User *filho = pai->nextR;
-    pai->nextR = filho->nextL;
-    filho->nextL = pai;
-    pai->fb = 0;
-    filho->fb = 0;
-    *r = filho;
-}
-
-void EE(User **r) {
-    User *pai = *r;
-    User *filho = pai->nextL;
-    pai->nextL = filho->nextR;
-    filho->nextR = pai;
-    pai->fb = 0;
-    filho->fb = 0;
-    *r = filho;
-}
-
-void ED(User **r) {
-    User *pai = *r;
-    User *filho = pai->nextL;
-    User *neto = filho->nextR;
-    pai->nextL=neto->nextR;
-    filho->nextR = neto->nextL;
-    neto->nextL = filho;
-    neto->nextR = pai;
-    switch(neto->fb) {
-        case -1:
-            pai->fb = 1;
-            filho->fb = 0;
-            break;
-        case 0:
-            pai->fb = 0;
-            filho->fb = 0;
-            break;
-        case 1:
-            pai->fb = 0;
-            filho->fb = -1;
-            break;
-    }
-    neto->fb = 0;
-    *r = neto;
-}
-
-void DE(User **r) {
-    User *pai = *r;
-    User *filho = pai->nextR;
-    User *neto = filho->nextL;
-    pai->nextR=neto->nextL;
-    filho->nextL = neto->nextR;
-    neto->nextR = filho;
-    neto->nextL = pai;
-    switch(neto->fb) {
-        case 1:
-            pai->fb = -1;
-            filho->fb = 0;
-            break;
-        case 0:
-            pai->fb = 0;
-            filho->fb = 0;
-            break;
-        case -1:
-            pai->fb = 0;
-            filho->fb = 1;
-            break;
-    }
-    neto->fb = 0;
-    *r = neto;
-}
-
-/*void InsertUser(Tree **t, User *newUser, int *e) {
-    int cresceu;
-
-}*/
-
-void InsertUser(Tree **t, User *newUser, int *e){
-    if(t == NULL || (*t) == NULL){
-        *e = -1;
-        return;
-    }
-
-    if((*t)->root == NULL){
-        (*t)->root = newUser;
-        *e = 0;
-    } else {
-        *e = SupInsertUser(&(*t)->root, newUser);
-        if(*e == 0){
-            BalanceTree(t, newUser->numero_usp);
-        }
-    }
-}
-
-int SupInsertUser(User **current, User *newUser){
-    if(current == NULL){
-        return -1;
-    }
-
-    if((*current) == NULL){
-        (*current) = newUser;
-
-        return 0;
-    } else {
-        if(newUser->numero_usp < (*current)->numero_usp){
-            return SupInsertUser(&(*current)->nextL, newUser);
-        } else if(newUser->numero_usp > (*current)->numero_usp){
-            return SupInsertUser(&(*current)->nextR, newUser);
-        } else {
-            return 1;
-        }
-    }
 }
 
 User* FindUser(Tree *t, int n){

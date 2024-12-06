@@ -15,7 +15,6 @@ typedef struct user{
 }User;
 
 User* CreateUser(int, char*, List*, int*);
-void InsertUser(Tree**, User*, int*);
 
 
 User* FindUser(Tree*, int);

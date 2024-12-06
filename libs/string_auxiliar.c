@@ -49,28 +49,32 @@ void to_lowercase(Elem str) {
     }
 }
 
-int GetInteger(char* prompt, char* errorPrompt){
+
+int GetInteger(char* prompt, char* errorPrompt) {
     char* placeholder = (char*)malloc(sizeof(char) * LENGTH);
 
-    printf("%s", prompt);
+    while (1) {
+        printf("%s", prompt);
+        fgets(placeholder, LENGTH, stdin);
 
-    fgets(placeholder, LENGTH, stdin);
-    //printf("placeholder: %s\n", placeholder);
-    //printf("*placeholder: %c\n", *placeholder);
+        // Remover '\n', se presente
+        placeholder[strcspn(placeholder, "\n")] = '\0';
 
-    //printf("Eh digito? %d\n", isdigit(*placeholder));
-
-    char* digits = (char*)malloc(strlen(placeholder)+1);
-
-    strcpy(digits, placeholder);
-    for(int i = 0; i < strlen(placeholder); i++){
-        if(!isdigit(*placeholder)){
-            printf("%s", errorPrompt);
-            return GetInteger(prompt, errorPrompt);
+        // Verificar se todos os caracteres são dígitos
+        int isValid = 1;
+        for (int i = 0; i < strlen(placeholder); i++) {
+            if (!isdigit(placeholder[i])) {
+                isValid = 0;
+                break;
+            }
         }
 
-        placeholder++;
-    }
+        if (isValid) {
+            int value = atoi(placeholder);
+            free(placeholder);
+            return value;
+        }
 
-    return atoi(digits);
+        printf("%s", errorPrompt);
+    }
 }
