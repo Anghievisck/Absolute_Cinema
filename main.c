@@ -2,10 +2,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 
 #include "libs/user.h"
 #include "libs/bst.h"
 #include "libs/lista_ordenada.h"
+
+
+void delay(float seconds) {
+    time_t start_time = time(NULL);
+    while (time(NULL) - start_time < seconds) {
+    }
+}
+
 
 User* Cria_usuario() {
     int n_USP, erro, contador = 1;
@@ -154,13 +163,24 @@ int main(int argc, char* argv[]){
 
             case FECHAR_PROGRAMA:
                 Delete(&t);
-                loop = 0;
+                return 0;
             break;
 
             default:
                 printf("Digite uma acao valida...\n");
             break;
-        }
-    }
+        } //fim do switch
+
+        delay(3);
+        //printf("\nFazer proxima acao? (S/N):\n");
+        //char option;
+        //scanf("%c", &option);
+        //if(option == 'N' || option == 'n') {
+            //printf("\nFechando o programa...\n");
+            //delay(5);
+            //Delete(&t);
+            //return 0;
+        //}
+    } //fim do while
     return 0;
 }
