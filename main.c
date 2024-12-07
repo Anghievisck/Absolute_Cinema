@@ -204,6 +204,11 @@ void ExportTree(Tree *t){
 
     fclose(fh_output);
 }
+void Remocao(Tree *t){
+    int num;
+    num = GetInteger("Digite o seu Numero USP: ", "O numero USP deve ser um numero");
+    remove(&t->root, num);
+}
 
 typedef enum {
     NOVO_CADASTRO,
