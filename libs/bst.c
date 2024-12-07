@@ -20,11 +20,21 @@ Tree* CreateTree(int *e){
         return NULL;
     } else {
         newTree->root = NULL;
+        newTree->Number_of_nodes = 0;
         return newTree;
     }
 }
 
+void MaxDiff(User *u, int *max){
+    if(u!=NULL){
+        if((u->fb)*(u->fb) > (*max)*(*max)){
+            *max = u->fb;
+        }
+        MaxDiff(u->nextL, max);
+        MaxDiff(u->nextR, max);
+    }
 
+}
 void DD(User **r) {
     User *pai = *r;
     User *filho = pai->nextR;

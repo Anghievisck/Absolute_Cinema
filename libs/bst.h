@@ -5,6 +5,7 @@ typedef struct user User;
 
 typedef struct tree{
     User *root;
+    int Number_of_nodes;
 }Tree;
 
 Tree* CreateTree(int*);
@@ -16,6 +17,7 @@ void BalanceTree(Tree**, int n);
 //User* RotateRight(User*);
 int insert_in_tree(User **p, User *x);
 int Tree_height(Tree *A);
+void MaxDiff(User *u, int *max);
 
 void PrintTree(Tree*, char*, char*, char*);
 

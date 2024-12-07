@@ -84,6 +84,15 @@ void ExportTree(Tree *t){
 
     fclose(fh_output);
 }
+int Maior_Gap(Tree *t){
+    int maior=0;
+    MaxDiff(t->root, maior);
+    //como pegamos os fatores de balanceamento pode ser o caso de ser menor que 0
+    if(maior < 0){
+        maior = maior - 2*maior; 
+    }
+    return(maior);
+}
 
 
 typedef enum {
@@ -150,8 +159,11 @@ int main(int argc, char* argv[]){
         switch(acao) {
             case NOVO_CADASTRO:
                 insert_in_tree(&(t->root), Cria_usuario(mais_legais));
-                if(erro != 0) 
+                if(erro != 0){ 
                     printf("\nErro ao colocar o usuario na arvore\n");
+                }else{
+                    t->Number_of_nodes++;
+                }
             break;
 
             case LISTAR_TODOS_ALUNOS:
@@ -179,6 +191,46 @@ int main(int argc, char* argv[]){
             break;
 
             case VER_FILME_NOVO:
+
+            break;
+
+            case FILME_BEM_DIFERENTE:
+
+            break;
+            
+            case ARQUIVO_TEXTO:
+
+            break;
+
+            case NUMERO_NOS_ARVORE:
+                printf("Ha %d nos na arvore. \n", t->Number_of_nodes);
+            break;
+
+            case ALTURA_ARVORE:
+                printf("A altura da arvore e %d", Tree_height(t));
+            break;
+
+            case MAIOR_DIF_H_SUBARVORES:
+                printf("A maior diferenca de altura é %d. \n", Maior_Gap(t));
+            break;
+
+            case RETIRAR_CADASTRO:
+
+            break;
+
+            case ADICIONAR_FILME:
+
+            break;
+            
+            case REMOVER_FILME:
+
+            break;
+            
+            case FILMES_MAIS_QUERIDOS:
+
+            break;
+
+            case REINICIAR_SISTEMA:
 
             break;
 
