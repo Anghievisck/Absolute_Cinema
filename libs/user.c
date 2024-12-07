@@ -13,7 +13,6 @@ User* CreateUser(int n_USP, char* name, List *L, int *erro) {
     User *u = (User*)malloc(sizeof(User));
     if(u == NULL)
         *erro = 1;
-    u->degree = 0;
     u->fb = 0;
     u->nextL = NULL;
     u->nextR = NULL;

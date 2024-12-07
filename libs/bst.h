@@ -13,8 +13,6 @@ int IsTreeEmpty(Tree*);
 void Delete(Tree**);
 
 void BalanceTree(Tree**, int n);
-//User* RotateLeft(User*);
-//User* RotateRight(User*);
 int insert_in_tree(User **p, User *x);
 int Tree_height(Tree *A);
 void MaxDiff(User *u, int *max);

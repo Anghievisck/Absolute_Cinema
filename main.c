@@ -16,7 +16,7 @@ void delay(float seconds) {
 }
 
 
-void adiciona_filme(List *usuario, List *geral, int *erro) {
+void adiciona_filme(User *usuario, List *geral, int *erro) {
     *erro = 0;
     int erro1, erro2;
     char option = 's';
@@ -25,7 +25,7 @@ void adiciona_filme(List *usuario, List *geral, int *erro) {
     while(option != 'n' && option != 'N'){
         placeholder = GetString("\nDigite o nome do filme: ");
     
-        insert_elem(usuario, placeholder, &erro1); 
+        insert_elem(usuario->movies, placeholder, &erro1); 
         insert_elem(geral, placeholder, &erro2);
         if(erro1 || erro2){
             printf("\nErro ao adicionar o filme...\n");
@@ -35,6 +35,29 @@ void adiciona_filme(List *usuario, List *geral, int *erro) {
         }
     
         printf("\nDeseja adicionar um novo filme? (S/N)\n>>> ");
+        scanf("%c", &option);
+    }
+}
+
+void remove_filme(User *usuario, List *geral, int *erro) {
+    *erro = 0;
+    int erro1, erro2;
+    char option = 's';
+    char *placeholder;
+    
+    while(option != 'n' && option != 'N'){
+        placeholder = GetString("\nDigite o nome do filme: ");
+    
+        remove_elem(usuario->movies, placeholder, &erro1); 
+        remove_elem(geral, placeholder, &erro2);
+        if(erro1 || erro2){
+            printf("\nErro ao remover o filme...\n");
+            *erro = 1;
+            free(placeholder);
+            return;
+        }
+    
+        printf("\nDeseja remover outro filme? (S/N)\n>>> ");
         scanf("%c", &option);
     }
 }
@@ -56,11 +79,7 @@ User* Cria_usuario(List *G) {
         return NULL;
     }
 
-    adiciona_filme(L, G, &erro);
-    if(erro) {
-        printf("Cadastro nao efetuado \n");
-        return NULL;
-    }
+    
 
     User *u = CreateUser(n_USP, name, L, &erro);
     free(name);
@@ -69,21 +88,16 @@ User* Cria_usuario(List *G) {
         printf("Cadastro nao efetuado \n");
         return NULL;
     }
+    adiciona_filme(u, G, &erro);
+    if(erro) {
+        printf("Cadastro nao efetuado \n");
+        return NULL;
+    }
+
     return u;
 }
 
-void ExportTree(Tree *t){
-    FILE *fh_output; // File handler, modo de saída
 
-    fh_output = fopen("tree_data.txt", "w");
-
-    int placeholder = 0;
-    fprintf(fh_output, "a) Atualmente, a ABB possui um total de %d usuarios distintos\n", placeholder);
-    fprintf(fh_output, "b) Atualmente, a altura da ABB é %d\n", t->root->degree);
-    fprintf(fh_output, "c) Atualmente, a maior diferenca de alturas da ABB é de %d\n", placeholder);
-
-    fclose(fh_output);
-}
 int Maior_Gap(Tree *t){
     int maior=0;
     MaxDiff(t->root, &maior);
@@ -178,10 +192,17 @@ void RecomendacaoDiff(Tree *t){
     printf("Vai falar com o %s", temp->nome);
 }
 
-void Remocao(Tree *t){
-    int eu;
-    eu = GetInteger("Digite o seu Numero USP: ", "O numero USP deve ser um numero");
-    remove(&t->root, eu);
+void ExportTree(Tree *t){
+    FILE *fh_output; // File handler, modo de saída
+
+    fh_output = fopen("tree_data.txt", "w");
+
+    int placeholder = 0;
+    fprintf(fh_output, "a) Atualmente, a ABB possui um total de %d usuarios distintos\n", placeholder);
+    fprintf(fh_output, "b) Atualmente, a altura da ABB é %d\n", t->root);
+    fprintf(fh_output, "c) Atualmente, a maior diferenca de alturas da ABB é de %d\n", placeholder);
+
+    fclose(fh_output);
 }
 
 typedef enum {
@@ -308,11 +329,11 @@ int main(int argc, char* argv[]){
             break;
 
             case ADICIONAR_FILME:
-
+                adiciona_filme(FindUser(t, GetInteger("Digite o seu numero USP: ", "O numero USP deve ser um numero")), mais_legais, &erro);
             break;
             
             case REMOVER_FILME:
-
+                remove_filme(FindUser(t, GetInteger("Digite o seu numero USP: ", "O numero USP deve ser um numero")), mais_legais, &erro);
             break;
             
             case FILMES_MAIS_QUERIDOS:
