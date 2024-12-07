@@ -93,11 +93,12 @@ int Maior_Gap(Tree *t){
     }
     return(maior);
 }
+
 void EncontrarTresMaiores(List *l) {
     // Inicializa os 3 maiores com valores mínimos
     Node *maior1, *maior2, *maior3;
     maior1 = maior2 = maior3 = NULL;
-    int m1,m2, m3;
+    int m1, m2, m3;
     m1 = m2 = m3 = -1;
     Node *sup = l->inicio;
 
@@ -121,52 +122,60 @@ void EncontrarTresMaiores(List *l) {
         }
         sup = sup->prox;
     }
-    char *aux;
-    printf("Os mais queridos filmes são:\n");
+    char *aux = (char*) malloc(sizeof(char)*LENGTH);
+    printf("Os mais queridos filmes sao:\n");
     if(maior1 != NULL){
         strcpy(aux, maior1->info);
+        to_lowercase(aux);
         to_uppercase_after_space(aux);
-        printf("%s", aux);
+        printf("%s; ", aux);
     }else{
         printf("Nao ha filmes no registro");
         return;
     }
     if(maior2 !=NULL){
         strcpy(aux, maior2->info);
+        to_lowercase(aux);
         to_uppercase_after_space(aux);
-        printf("%s", aux);
+        printf("%s; ", aux);
     }else{
         return;
     }
     if(maior3 !=NULL){
         strcpy(aux, maior3->info);
+        to_lowercase(aux);
         to_uppercase_after_space(aux);
         printf("%s", aux);
     }
+    free(aux);
 }
+
 void RecomedacaoSimilar(Tree *t){
-    User temp, *eu;
+    if(IsTreeEmpty(t)) {
+        printf("O sistema esta vazio");
+        return;
+    }
+    User *temp, *eu;
     int max = 0;
     eu = FindUser(t, GetInteger("Digite o seu Numero USP: ", "O numero USP deve ser um numero"));
     SimilarUser(eu, t->root, &temp, &max);
     if(max == 0){
         printf("Voce é estranho, logo nao tem recomendacoes");
     }else{
-        char *aux;
-        strcpy(aux, temp.nome);
-        to_uppercase_after_space(aux);
-        printf("Vai falar com o %s", aux);
+        printf("Vai falar com o %s", temp->nome);
     }
 }
+
 void RecomendacaoDiff(Tree *t){
-    User temp, *eu;
+    if(IsTreeEmpty(t)) {
+        printf("O sistema esta vazio");
+        return;
+    }
+    User *temp, *eu;
     int min = -1;
     eu = FindUser(t, GetInteger("Digite o seu Numero USP: ", "O numero USP deve ser um numero"));
     Diffuser(eu, t->root, &temp, &min);
-    char *aux;
-    strcpy(aux, temp.nome);
-    to_uppercase_after_space(aux);
-    printf("Vai falar com o %s", aux);
+    printf("Vai falar com o %s", temp->nome);
 }
 
 typedef enum {

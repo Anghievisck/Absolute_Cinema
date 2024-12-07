@@ -16,8 +16,8 @@ typedef struct user{
 
 User* CreateUser(int, char*, List*, int*);
 
-void SimilarUser(User *eu, User *pretendente, User *atual, int *max);
-void Diffuser(User *eu, User *pretendente, User *atual, int *min);
+void SimilarUser(User *eu, User *pretendente, User **atual, int *max);
+void Diffuser(User *eu, User *pretendente, User **atual, int *min);
 User* FindUser(Tree*, int);
 
 void DeleteUser(User **);
