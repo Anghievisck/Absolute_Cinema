@@ -86,7 +86,7 @@ void ExportTree(Tree *t){
 }
 int Maior_Gap(Tree *t){
     int maior=0;
-    MaxDiff(t->root, maior);
+    MaxDiff(t->root, &maior);
     //como pegamos os fatores de balanceamento pode ser o caso de ser menor que 0
     if(maior < 0){
         maior = maior - 2*maior; 
@@ -114,13 +114,13 @@ void EncontrarTresMaiores(List *l) {
     }
     char *aux;
     printf("Os mais queridos filmes são:\n");
-    strcpy(aux, maior1);
+    strcpy(aux, maior1->info);
     to_uppercase_after_space(aux);
     printf("%s", aux);
-    strcpy(aux, maior2);
+    strcpy(aux, maior2->info);
     to_uppercase_after_space(aux);
     printf("%s", aux);
-    strcpy(aux, maior3);
+    strcpy(aux, maior3->info);
     to_uppercase_after_space(aux);
     printf("%s", aux);
 }
@@ -128,7 +128,7 @@ void RecomedacaoSimilar(Tree *t){
     User temp, *eu;
     int max = 0;
     eu = FindUser(t, GetInteger("Digite o seu Numero USP: ", "O numero USP deve ser um numero"));
-    SimilarUser(eu, t->Number_of_nodes, &temp, &max);
+    SimilarUser(eu, t->root, &temp, &max);
     if(max == 0){
         printf("Voce é estranho, logo nao tem recomendacoes");
     }else{
@@ -142,7 +142,7 @@ void RecomendacaoDiff(Tree *t){
     User temp, *eu;
     int min = -1;
     eu = FindUser(t, GetInteger("Digite o seu Numero USP: ", "O numero USP deve ser um numero"));
-    Diffuser(eu, t->Number_of_nodes, &temp, &min);
+    Diffuser(eu, t->root, &temp, &min);
     char *aux;
     strcpy(aux, temp.nome);
     to_uppercase_after_space(aux);
