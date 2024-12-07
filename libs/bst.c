@@ -196,6 +196,7 @@ void Delete(Tree **t){
     } else {
         DeleteUsers(&(*t)->root);
     }
+    
 }
 
 int Node_height(User* p) {

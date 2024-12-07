@@ -93,6 +93,37 @@ int Maior_Gap(Tree *t){
     }
     return(maior);
 }
+void EncontrarTresMaiores(List *l) {
+    // Inicializa os 3 maiores com valores mínimos
+    Node *maior1, *maior2, *maior3;
+    maior1->qnt_igual = maior2->qnt_igual = maior3->qnt_igual = -1;
+    Node *sup = l->inicio;
+
+    while(sup != NULL) {
+        if (sup->qnt_igual > maior1->qnt_igual) {
+            // Atualiza os maiores
+            maior3->qnt_igual = maior2->qnt_igual;
+            maior2->qnt_igual = maior1->qnt_igual;
+            maior1->qnt_igual = sup->qnt_igual;
+        } else if (sup->qnt_igual > maior2->qnt_igual) {
+            maior3->qnt_igual = maior2->qnt_igual;
+            maior2->qnt_igual = sup->qnt_igual;
+        } else if (sup->qnt_igual > maior3->qnt_igual) {
+            maior3->qnt_igual = sup->qnt_igual;
+        }
+    }
+    char *aux;
+    printf("Os mais queridos filmes são:\n");
+    strcpy(aux, maior1);
+    to_uppercase_after_space(aux);
+    printf("%s", aux);
+    strcpy(aux, maior2);
+    to_uppercase_after_space(aux);
+    printf("%s", aux);
+    strcpy(aux, maior3);
+    to_uppercase_after_space(aux);
+    printf("%s", aux);
+}
 
 
 typedef enum {
@@ -199,7 +230,7 @@ int main(int argc, char* argv[]){
             break;
             
             case ARQUIVO_TEXTO:
-
+                ExportTree(t);
             break;
 
             case NUMERO_NOS_ARVORE:
@@ -227,11 +258,15 @@ int main(int argc, char* argv[]){
             break;
             
             case FILMES_MAIS_QUERIDOS:
-
+                EncontrarTresMaiores(mais_legais);
             break;
 
             case REINICIAR_SISTEMA:
-
+                Delete(&t);
+                DestroyList(mais_legais);
+                int erro;
+                mais_legais = Create_list(PESOS, &erro);
+                t->Number_of_nodes = 0;
             break;
 
             case FECHAR_PROGRAMA:
