@@ -96,33 +96,53 @@ int Maior_Gap(Tree *t){
 void EncontrarTresMaiores(List *l) {
     // Inicializa os 3 maiores com valores mínimos
     Node *maior1, *maior2, *maior3;
-    maior1->qnt_igual = maior2->qnt_igual = maior3->qnt_igual = -1;
+    maior1 = maior2 = maior3 = NULL;
+    int m1,m2, m3;
+    m1 = m2 = m3 = -1;
     Node *sup = l->inicio;
 
     while(sup != NULL) {
-        if (sup->qnt_igual > maior1->qnt_igual) {
+        if (sup->qnt_igual > m1) {
             // Atualiza os maiores
-            maior3->qnt_igual = maior2->qnt_igual;
-            maior2->qnt_igual = maior1->qnt_igual;
-            maior1->qnt_igual = sup->qnt_igual;
-        } else if (sup->qnt_igual > maior2->qnt_igual) {
-            maior3->qnt_igual = maior2->qnt_igual;
-            maior2->qnt_igual = sup->qnt_igual;
-        } else if (sup->qnt_igual > maior3->qnt_igual) {
-            maior3->qnt_igual = sup->qnt_igual;
+            maior3 = maior2;
+            maior2 = maior1;
+            maior1 = sup;
+            m3 = m2;
+            m2 = m1;
+            m1 = sup->qnt_igual;
+        } else if (sup->qnt_igual > m2) {
+            maior3 = maior2;
+            maior2 = sup;
+            m3 = m2;
+            m2 = sup->qnt_igual;
+        } else if (sup->qnt_igual > m3) {
+            maior3 = sup;
+            m3 = sup->qnt_igual;
         }
+        sup = sup->prox;
     }
     char *aux;
     printf("Os mais queridos filmes são:\n");
-    strcpy(aux, maior1->info);
-    to_uppercase_after_space(aux);
-    printf("%s", aux);
-    strcpy(aux, maior2->info);
-    to_uppercase_after_space(aux);
-    printf("%s", aux);
-    strcpy(aux, maior3->info);
-    to_uppercase_after_space(aux);
-    printf("%s", aux);
+    if(maior1 != NULL){
+        strcpy(aux, maior1->info);
+        to_uppercase_after_space(aux);
+        printf("%s", aux);
+    }else{
+        printf("Nao ha filmes no registro");
+        return;
+    }
+    if(maior2 !=NULL){
+        strcpy(aux, maior2->info);
+        to_uppercase_after_space(aux);
+        printf("%s", aux);
+    }else{
+        return;
+    }
+    if(maior3 !=NULL){
+        strcpy(aux, maior3->info);
+        to_uppercase_after_space(aux);
+        printf("%s", aux);
+    }
 }
 void RecomedacaoSimilar(Tree *t){
     User temp, *eu;
