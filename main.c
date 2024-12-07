@@ -23,6 +23,7 @@ void Remocao(Tree *t){
 }
 
 void adiciona_filme(User *usuario, List *geral, int *erro) {
+    if(usuario == NULL) return;
     *erro = 0;
     int erro1, erro2;
     char option = 's';
