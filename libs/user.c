@@ -25,7 +25,9 @@ User* CreateUser(int n_USP, char* name, List *L, int *erro) {
 }
 
 User* FindUser(Tree *t, int n){
-    if(t->root->numero_usp == n){
+    if(t->root == NULL){
+        return NULL;
+    } else if(t->root->numero_usp == n){
         return t->root;
     } else {
         User *aux = (t->root->numero_usp > n) ? t->root->nextL : t->root->nextR;

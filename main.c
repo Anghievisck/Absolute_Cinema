@@ -15,6 +15,13 @@ void delay(float seconds) {
     }
 }
 
+void Remocao(Tree *t){
+    if (IsTreeEmpty(t)) return;
+
+    int n = GetInteger("Digite seu numero USP:\n>>> ", "O **NUMERO** USP deve ser um numero...\n");
+
+    Remove(&t->root, n);
+}
 
 void adiciona_filme(User *usuario, List *geral, int *erro) {
     *erro = 0;
@@ -63,11 +70,18 @@ void remove_filme(User *usuario, List *geral, int *erro) {
 }
 
 //faz a interface com o usuário para criar um usuário no sistema. Recebe a lista de filmes gerais
-User* Cria_usuario(List *G) {
+User* Cria_usuario(List *G, Tree *t) {
     int n_USP, erro;
     char* name;
 
-    n_USP = GetInteger("Insira o seu numero USP: ", "O numero USP deve ser um numero...\n");
+    while(1){
+        n_USP = GetInteger("Insira o seu numero USP: ", "O numero USP deve ser um numero...\n");
+        if(FindUser(t, n_USP) != NULL){
+            printf("Esse numero USP já foi cadastrado, favor verifique seu numero...\n");
+        } else {
+            break;
+        }
+    }
 
     name = GetString("Insira seu nome: ");
 
@@ -204,11 +218,6 @@ void ExportTree(Tree *t){
 
     fclose(fh_output);
 }
-void Remocao(Tree *t){
-    int num;
-    num = GetInteger("Digite o seu Numero USP: ", "O numero USP deve ser um numero");
-    remove(&t->root, num);
-}
 
 typedef enum {
     NOVO_CADASTRO,
@@ -273,7 +282,7 @@ int main(int argc, char* argv[]){
         printf("\n");
         switch(acao) {
             case NOVO_CADASTRO:
-                insert_in_tree(&(t->root), Cria_usuario(mais_legais));
+                insert_in_tree(&(t->root), Cria_usuario(mais_legais, t));
                 if(erro != 0){ 
                     printf("\nErro ao colocar o usuario na arvore\n");
                 }else{

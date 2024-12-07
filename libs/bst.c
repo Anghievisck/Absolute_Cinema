@@ -5,6 +5,7 @@
 #include "user.h"
 #include "lista_ordenada.h"
 
+User* balanciar(User *);
 void SupPrintUsers(User*, char*, char*, char*);
 
 int aux_insert(User **p, User *x, int *cresceu);
@@ -80,50 +81,7 @@ void ED(User **r) {
     neto->fb = 0;
     *r = neto;
 }
-User* remove(User **r, int target){
-    if(r == NULL){
-        printf("Usuario nao encontrado. \n");
-        return;
-    } else {
-        if((*r)->numero_usp == target){
-            if((*r)->nextL == NULL && (*r)->nextR == NULL){
-                DeleteUser(r);
-                return(NULL);
-            } else {
-                if((*r)->nextL != NULL && (*r)->nextR != NULL){
-                    User **aux = (*r)->nextL;
-                    while((*aux)->nextR != NULL){
-                        aux = (*aux) ->nextR;
-                    }
-                    User **temp = aux;
-                    *aux = *r;
-                    *r = *temp;
-                    (*r)->nextL = remove((*r)->nextL, target);
-                    return(*r);
-                }else{
-                    User *aux;
-                    if((*r)->nextL != NULL){
-                        aux = (*r)->nextL;
-                    }else{
-                        aux = (*r)->nextR;
-                    }
-                    DeleteUser(r);
-                    return(aux);
-                }
 
-            }
-
-        } else{
-            if(target < (*r)->numero_usp){
-                (*r)->nextL = remove((*r)->nextL, target);
-            }else{
-                (*r)->nextR = remove((*r)->nextR, target);
-            }
-        }
-        (*r) = balanciar(*r);
-        return((*r));
-    }
-}
 User* balanciar(User *r){
     int fb = fbnode(r);
     if(fb < -1 && fbnode(r->nextR) <= 0){
@@ -292,5 +250,50 @@ void SupPrintUsers(User *u, char* p_number, char* p_string, char* p_list){
         printf("\n%s: \n", p_list);
         printList(u->movies, &e);
         SupPrintUsers(u->nextR, p_number, p_string, p_list);
+    }
+}
+
+User* Remove(User **r, int target){
+    if(r == NULL){
+        printf("Usuario nao encontrado. \n");
+        return NULL;
+    } else {
+        if((*r)->numero_usp == target){
+            if((*r)->nextL == NULL && (*r)->nextR == NULL){
+                DeleteUser(r);
+                return(NULL);
+            } else {
+                if((*r)->nextL != NULL && (*r)->nextR != NULL){
+                    User **aux = &(*r)->nextL;
+                    while((*aux)->nextR != NULL){
+                        aux = (*aux) ->nextR;
+                    }
+                    User **temp = aux;
+                    *aux = *r;
+                    *r = *temp;
+                    (*r)->nextL = Remove(&(*r)->nextL, target);
+                    return(*r);
+                }else{
+                    User *aux;
+                    if((*r)->nextL != NULL){
+                        aux = (*r)->nextL;
+                    }else{
+                        aux = (*r)->nextR;
+                    }
+                    DeleteUser(r);
+                    return(aux);
+                }
+
+            }
+
+        } else{
+            if(target < (*r)->numero_usp){
+                (*r)->nextL = Remove(&(*r)->nextL, target);
+            }else{
+                (*r)->nextR = Remove(&(*r)->nextR, target);
+            }
+        }
+        (*r) = balanciar(*r);
+        return((*r));
     }
 }

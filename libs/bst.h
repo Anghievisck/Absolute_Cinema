@@ -16,7 +16,7 @@ void BalanceTree(Tree**, int n);
 int insert_in_tree(User **p, User *x);
 int Tree_height(Tree *A);
 void MaxDiff(User *u, int *max);
-User* remove(User **r, int target);
+User* Remove(User **r, int target);
 
 void PrintTree(Tree*, char*, char*, char*);
 
