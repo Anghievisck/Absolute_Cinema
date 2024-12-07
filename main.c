@@ -122,7 +122,7 @@ void EncontrarTresMaiores(List *l) {
         sup = sup->prox;
     }
     char *aux;
-    printf("Os mais queridos filmes são:\n");
+    printf("Os mais queridos filmes sao:\n");
     if(maior1 != NULL){
         strcpy(aux, maior1->info);
         to_uppercase_after_space(aux);
