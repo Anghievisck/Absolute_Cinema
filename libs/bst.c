@@ -7,8 +7,9 @@
 
 void SupPrintUsers(User*, char*, char*, char*);
 
-void BalanceSubtree(User**, int n);
-int UpdateDegree(User*);
+int aux_insert(User **p, User *x, int *cresceu);
+//void BalanceSubtree(User**, int n);
+//int UpdateDegree(User*);
 
 Tree* CreateTree(int *e){
     *e = 0;
@@ -187,7 +188,39 @@ void Delete(Tree **t){
     }
 }
 
-int GetBalance(User *u){
+int Node_height(User* p) {
+    int alt_esq, alt_dir;
+    if(p == NULL)
+        return 0;
+    alt_esq = 1 + Node_height(p->nextL);
+    alt_dir = 1 + Node_height(p->nextR);
+    if(alt_esq > alt_dir)
+        return(alt_esq);
+    return(alt_dir);
+}
+int Tree_height(Tree *A) {
+    return(Node_height(A->root));
+}
+
+void PrintTree(Tree *t, char* p_number, char* p_string, char*p_list){
+    SupPrintUsers(t->root, p_number, p_string, p_list);
+}
+
+void SupPrintUsers(User *u, char* p_number, char* p_string, char* p_list){
+    int e;
+    if(u == NULL){
+        return;
+    } else {
+        SupPrintUsers(u->nextL, p_number, p_string, p_list);
+        printf("%s: %d | %s: %s", p_number, u->numero_usp, p_string, u->nome);
+        printf("\n%s: \n", p_list);
+        printList(u->movies, &e);
+        SupPrintUsers(u->nextR, p_number, p_string, p_list);
+    }
+}
+
+
+/*int GetBalance(User *u){
     if(u == NULL){
         return 0;
     } else {
@@ -272,21 +305,4 @@ int UpdateDegree(User* current){
     }
 
     return current->degree;
-}
-
-void PrintTree(Tree *t, char* p_number, char* p_string, char*p_list){
-    SupPrintUsers(t->root, p_number, p_string, p_list);
-}
-
-void SupPrintUsers(User *u, char* p_number, char* p_string, char* p_list){
-    int e;
-    if(u == NULL){
-        return;
-    } else {
-        SupPrintUsers(u->nextL, p_number, p_string, p_list);
-        printf("%s: %d | %s: %s", p_number, u->numero_usp, p_string, u->nome);
-        printf("\n%s: \n", p_list);
-        printList(u->movies, &e);
-        SupPrintUsers(u->nextR, p_number, p_string, p_list);
-    }
-}
+}*/
