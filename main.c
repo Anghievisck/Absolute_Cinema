@@ -124,7 +124,30 @@ void EncontrarTresMaiores(List *l) {
     to_uppercase_after_space(aux);
     printf("%s", aux);
 }
-
+void RecomedacaoSimilar(Tree *t){
+    User temp, *eu;
+    int max = 0;
+    eu = FindUser(t, GetInteger("Digite o seu Numero USP: ", "O numero USP deve ser um numero"));
+    SimilarUser(eu, t->Number_of_nodes, &temp, &max);
+    if(max == 0){
+        printf("Voce é estranho, logo nao tem recomendacoes");
+    }else{
+        char *aux;
+        strcpy(aux, temp.nome);
+        to_uppercase_after_space(aux);
+        printf("Vai falar com o %s", aux);
+    }
+}
+void RecomendacaoDiff(Tree *t){
+    User temp, *eu;
+    int min = -1;
+    eu = FindUser(t, GetInteger("Digite o seu Numero USP: ", "O numero USP deve ser um numero"));
+    Diffuser(eu, t->Number_of_nodes, &temp, &min);
+    char *aux;
+    strcpy(aux, temp.nome);
+    to_uppercase_after_space(aux);
+    printf("Vai falar com o %s", aux);
+}
 
 typedef enum {
     NOVO_CADASTRO,
@@ -175,7 +198,7 @@ int main(int argc, char* argv[]){
         printf("8. Gerar arquivo de texto com todas as informacoes do sistema\n");
         printf("9. Quantidade de nos na arvore do sistema\n");
         printf("10. Altura da arvore do sistema\n");
-        printf("11. Maior diferenca  entre alturas que existe entre as sub-arvores de algum no da arvore\n");
+        printf("11. Maior diferenca  entre alturas que existem entre as sub-arvores de algum no da arvore\n");
         printf("12. Retirar cadastro de um usuario\n");
         printf("13. Adicionar filme na lista de um usuario\n");
         printf("14. Remover filme da lista de um usuario\n");
