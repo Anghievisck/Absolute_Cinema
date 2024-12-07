@@ -111,6 +111,7 @@ void EncontrarTresMaiores(List *l) {
         } else if (sup->qnt_igual > maior3->qnt_igual) {
             maior3->qnt_igual = sup->qnt_igual;
         }
+        sup = sup->prox;
     }
     char *aux;
     printf("Os mais queridos filmes são:\n");
