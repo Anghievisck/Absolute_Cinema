@@ -8,7 +8,7 @@ typedef struct user{
     int numero_usp;
     char* nome;
 
-    int degree, fb;
+    int fb;
     struct user *nextL, *nextR;
 
     List *movies;
