@@ -178,6 +178,12 @@ void RecomendacaoDiff(Tree *t){
     printf("Vai falar com o %s", temp->nome);
 }
 
+void Remocao(Tree *t){
+    int eu;
+    eu = GetInteger("Digite o seu Numero USP: ", "O numero USP deve ser um numero");
+    remove(&t->root, eu);
+}
+
 typedef enum {
     NOVO_CADASTRO,
     LISTAR_TODOS_ALUNOS,
@@ -298,7 +304,7 @@ int main(int argc, char* argv[]){
             break;
 
             case RETIRAR_CADASTRO:
-
+                Remocao(t);
             break;
 
             case ADICIONAR_FILME:

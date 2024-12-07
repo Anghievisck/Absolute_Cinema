@@ -229,7 +229,71 @@ void SupPrintUsers(User *u, char* p_number, char* p_string, char* p_list){
         SupPrintUsers(u->nextR, p_number, p_string, p_list);
     }
 }
+User* remove(User **r, int target){
+    if(r == NULL){
+        printf("Usuario nao encontrado. \n");
+        return;
+    } else {
+        if((*r)->numero_usp == target){
+            if((*r)->nextL == NULL && (*r)->nextR == NULL){
+                DeleteUser(r);
+                return(NULL);
+            } else {
+                if((*r)->nextL != NULL && (*r)->nextR != NULL){
+                    User **aux = (*r)->nextL;
+                    while((*aux)->nextR != NULL){
+                        aux = (*aux) ->nextR;
+                    }
+                    User **temp = aux;
+                    *aux = *r;
+                    *r = *temp;
+                    (*r)->nextL = remove((*r)->nextL, target);
+                    return(*r);
+                }else{
+                    User *aux;
+                    if((*r)->nextL != NULL){
+                        aux = (*r)->nextL;
+                    }else{
+                        aux = (*r)->nextR;
+                    }
+                    DeleteUser(r);
+                    return(aux);
+                }
 
+            }
+
+        } else{
+            if(target < (*r)->numero_usp){
+                (*r)->nextL = remove((*r)->nextL, target);
+            }else{
+                (*r)->nextR = remove((*r)->nextR, target);
+            }
+        }
+        (*r) = balanciar(*r);
+        return((*r));
+    }
+}
+User* balanciar(User *r){
+    int fb = fbnode(r);
+    if(fb < -1 && fbnode(r->nextR) <= 0){
+        DD(r);
+        return;
+    }
+    if(fb > 1 && fbnode(r->nextL) >= 0){
+        EE(r);
+        return;
+    }
+    if(fb > 1 && fbnode(r->nextL) < 0){
+        DE(r);
+    }
+    if(fb < -1 && fbnode(r->nextR) >0){
+        ED(r);
+    }
+    return(r);
+}
+int fbnode(User *r){
+    return(Node_height(r->nextR)-Node_height(r->nextL));
+}
 
 /*int GetBalance(User *u){
     if(u == NULL){
