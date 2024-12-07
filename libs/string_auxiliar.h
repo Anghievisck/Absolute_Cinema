@@ -10,4 +10,6 @@ typedef char* Elem;
 void to_uppercase(Elem str);
 void to_uppercase_after_space(Elem str);
 void to_lowercase(Elem str);
+
 int GetInteger(char* prompt, char* errorPrompt);
+char* GetString(char* prompt);

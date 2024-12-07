@@ -10,6 +10,8 @@ void to_uppercase(Elem str) {
 
     while (*ptr != '\0') {
         *ptr = toupper((unsigned char)*ptr); // converte caracteres para caixa alta
+        if(*ptr == '\n')
+            *ptr = '\0';
         ptr++;
     }
 }
@@ -30,7 +32,6 @@ void to_uppercase_after_space(Elem str) {
         if(*ptr == ' ') {
             space = 1;
         }
-        
         ptr++;
     }
 }
@@ -44,7 +45,9 @@ void to_lowercase(Elem str) {
     Elem ptr = str; // salva o ponteiro original
 
     while (*ptr != '\0') {
-        *ptr = tolower((unsigned char)*ptr); // converte caracteres para caixa alta
+        *ptr = tolower((unsigned char)*ptr); // converte caracteres para caixa baixa
+        if(*ptr == '\n')
+            *ptr = '\0';
         ptr++;
     }
 }
@@ -57,8 +60,13 @@ int GetInteger(char* prompt, char* errorPrompt) {
         printf("%s", prompt);
         fgets(placeholder, LENGTH, stdin);
 
+        if(*placeholder == '\n') {
+            fgets(placeholder, LENGTH, stdin);
+        }
+
         // Remover '\n', se presente
         placeholder[strcspn(placeholder, "\n")] = '\0';
+        
 
         // Verificar se todos os caracteres são dígitos
         int isValid = 1;
@@ -76,5 +84,19 @@ int GetInteger(char* prompt, char* errorPrompt) {
         }
 
         printf("%s", errorPrompt);
+    } //fim do while
+}
+
+char* GetString(char* prompt) {
+    char* placeholder = (char*)malloc(sizeof(char) * LENGTH);
+    printf("%s", prompt);
+    fgets(placeholder, LENGTH, stdin);
+
+    if(*placeholder == '\n') {
+        fgets(placeholder, LENGTH, stdin);
     }
+
+    // Remover '\n', se presente
+    placeholder[strcspn(placeholder, "\n")] = '\0';
+    return placeholder;
 }

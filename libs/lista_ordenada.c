@@ -104,7 +104,6 @@ int search_elem(List *L, Elem X, int *erro) {
     Node *aux = L->inicio;
     while(aux != NULL) {
         int v_comp = strcmp(str, aux->info);
-        printf("%d ", v_comp);
         if(v_comp == 0) { //se encontrou o valor
             free(str);
             if(L->tipo == UNICA)
@@ -192,8 +191,10 @@ void printList(List *L,int *erro) {
         strcpy(str, aux->info);
         to_lowercase(str);
         to_uppercase_after_space(str);
-
-        printf("%s", str);
+        if(L->tipo == UNICA)
+            printf("%s\n", str);
+        else 
+            printf("%s: %d\n", str, aux->qnt_igual);
         aux = aux->prox;
 
         free(str);
