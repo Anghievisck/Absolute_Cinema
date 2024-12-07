@@ -245,11 +245,11 @@ int main(int argc, char* argv[]){
             break;
 
             case VER_FILME_NOVO:
-
+                RecomedacaoSimilar(t);
             break;
 
             case FILME_BEM_DIFERENTE:
-
+                RecomendacaoDiff(t);
             break;
             
             case ARQUIVO_TEXTO:
