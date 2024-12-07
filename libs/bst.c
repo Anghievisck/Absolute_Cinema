@@ -263,11 +263,11 @@ int remover2(User **raiz,int valor){
     }
     if(valor < (*raiz)->numero_usp)
     {
-        if((controle=remover(&((*raiz)->nextL),valor))==1)
+        if((controle=remover2(&((*raiz)->nextL),valor))==1)
         {
-            if(fatorBalanceamento(*raiz)>=2)
+            if(fbnode(*raiz)>=2)
             {
-                if(alturaNoh((*raiz)->nextR->nextL)<=alturaNoh((*raiz)->nextR->nextR))
+                if(Node_height((*raiz)->nextR->nextL)<=Node_height((*raiz)->nextR->nextR))
                     EE(raiz);
                 else
                     ED(raiz);
@@ -276,12 +276,12 @@ int remover2(User **raiz,int valor){
     }
     if(valor>(*raiz)->numero_usp)
     {
-        if ((controle=remover(&((*raiz)->nextR),valor))==1)
+        if ((controle=remover2(&((*raiz)->nextR),valor))==1)
         {
 
-            if(fatorBalanceamento(*raiz)>=2)
+            if(fbnode(*raiz)>=2)
             {
-                if(alturaNoh((*raiz)->nextL->nextR)<=alturaNoh((*raiz)->nextL->nextL))
+                if(Node_height((*raiz)->nextL->nextR)<=Node_height((*raiz)->nextL->nextL))
                     DD(raiz);
                 else
                     DE(raiz);
@@ -307,12 +307,15 @@ int remover2(User **raiz,int valor){
         	//o pai tem dois filhos. 
         	//Substituir pelo nó mais a esquerda da subárvore da direita
             
-            User *nohAuxiliar = procuraMenor(&(*raiz)->nextR);
+            User *nohAuxiliar = (*raiz)->nextR;
+            while(nohAuxiliar->nextL != NULL){
+                nohAuxiliar = nohAuxiliar->nextL;
+            }
             (*raiz)->numero_usp = nohAuxiliar->numero_usp;
-            remover(&(*raiz)->nextR,(*raiz)->numero_usp);
-            if(fatorBalanceamento(*raiz)>=2)
+            remover2(&(*raiz)->nextR,(*raiz)->numero_usp);
+            if(fbnode(*raiz)>=2)
             {
-                if(alturaNoh((*raiz)->nextL->nextR)<=alturaNoh((*raiz)->nextL->nextL))
+                if(Node_height((*raiz)->nextL->nextR)<=Node_height((*raiz)->nextL->nextL))
                     DD(raiz);
                 else
                     ED(raiz);

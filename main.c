@@ -17,7 +17,6 @@ void delay(float seconds) {
 
 void Remocao(Tree *t){
     if (IsTreeEmpty(t)) return;
-
     int n = GetInteger("Digite seu numero USP:\n>>> ", "O **NUMERO** USP deve ser um numero...\n");
     remover2(&(t->root), n);
 }
