@@ -82,24 +82,17 @@ void ED(User **r) {
     *r = neto;
 }
 
-User* balanciar(User *r){
-    int fb = fbnode(r);
-    if(fb < -1 && fbnode(r->nextR) <= 0){
-        DD(r);
-        return;
-    }
-    if(fb > 1 && fbnode(r->nextL) >= 0){
-        EE(r);
-        return;
-    }
-    if(fb > 1 && fbnode(r->nextL) < 0){
-        DE(r);
-    }
-    if(fb < -1 && fbnode(r->nextR) >0){
-        ED(r);
-    }
-    return(r);
+int Node_height(User* p) {
+    int alt_esq, alt_dir;
+    if(p == NULL)
+        return 0;
+    alt_esq = 1 + Node_height(p->nextL);
+    alt_dir = 1 + Node_height(p->nextR);
+    if(alt_esq > alt_dir)
+        return(alt_esq);
+    return(alt_dir);
 }
+
 int fbnode(User *r){
     return(Node_height(r->nextR)-Node_height(r->nextL));
 }
@@ -130,6 +123,20 @@ void DE(User **r) {
     *r = neto;
 }
 
+User* balanciar(User *r){
+    int fb = fbnode(r);
+    if(fb < -1 && fbnode(r->nextR) <= 0){
+        DD(&r);
+    } else if(fb > 1 && fbnode(r->nextL) >= 0){
+        EE(&r);
+    } else if(fb > 1 && fbnode(r->nextL) < 0){
+        DE(&r);
+    } else if(fb < -1 && fbnode(r->nextR) >0){
+        ED(&r);
+    }
+
+    return(r);
+}
 
 int insert_in_tree(User **p, User *x){
     int cresceu;
@@ -222,16 +229,6 @@ void Delete(Tree **t){
     
 }
 
-int Node_height(User* p) {
-    int alt_esq, alt_dir;
-    if(p == NULL)
-        return 0;
-    alt_esq = 1 + Node_height(p->nextL);
-    alt_dir = 1 + Node_height(p->nextR);
-    if(alt_esq > alt_dir)
-        return(alt_esq);
-    return(alt_dir);
-}
 int Tree_height(Tree *A) {
     return(Node_height(A->root));
 }
@@ -340,7 +337,7 @@ User* Remove(User **r, int target){
                 if((*r)->nextL != NULL && (*r)->nextR != NULL){
                     User **aux = &(*r)->nextL;
                     while((*aux)->nextR != NULL){
-                        aux = (*aux) ->nextR;
+                        aux = &(*aux)->nextR;
                     }
                     User **temp = aux;
                     *aux = *r;
