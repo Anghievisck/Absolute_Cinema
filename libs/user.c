@@ -37,21 +37,7 @@ User* FindUser(Tree *t, int n){
         return SupFindUser(aux, n);
     }
 }
-void SimilarUser(User *eu, User *pretendente, User *atual, int *max){
-    if(pretendente != NULL){
-        if(eu->numero_usp != pretendente->numero_usp){
-            List *l;
-            int erro;
-            l = CompareLists(eu->movies, pretendente->movies, &erro);
-            if(l->tamanho > *max){
-                atual = pretendente;
-                *max = l->tamanho;
-            }
-        }
-        SimilarUser(eu, pretendente->nextL, atual, max);
-        SimilarUser(eu, pretendente->nextR, atual, max);
-    }
-}
+
 void SimilarUser(User *eu, User *pretendente, User **atual, int *max) {
     if (pretendente != NULL) {
         if (eu->numero_usp != pretendente->numero_usp) {
@@ -75,16 +61,18 @@ void SimilarUser(User *eu, User *pretendente, User **atual, int *max) {
         SimilarUser(eu, pretendente->nextR, atual, max);
     }
 }
-void Diffuser(User *eu, User *pretendente, User *atual, int *min){
+
+void Diffuser(User *eu, User *pretendente, User **atual, int *min){
     if(pretendente != NULL){
         if(eu->numero_usp != pretendente->numero_usp){
             List *l;
             int erro;
             l = CompareLists(eu->movies, pretendente->movies, &erro);
-            if(l->tamanho > *min || min == -1){
-                atual = pretendente;
+            if(l->tamanho > *min || *min == -1){
+                *atual = pretendente;
                 *min = l->tamanho;
             }
+            DestroyList(l);
         }
         SimilarUser(eu, pretendente->nextL, atual, min);
         SimilarUser(eu, pretendente->nextR, atual, min);
