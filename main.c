@@ -19,8 +19,7 @@ void Remocao(Tree *t){
     if (IsTreeEmpty(t)) return;
 
     int n = GetInteger("Digite seu numero USP:\n>>> ", "O **NUMERO** USP deve ser um numero...\n");
-
-    Remove(&t->root, n);
+    remover2(&(t->root), n);
 }
 
 void adiciona_filme(User *usuario, List *geral, int *erro) {

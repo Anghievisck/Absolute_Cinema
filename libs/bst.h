@@ -17,6 +17,7 @@ int insert_in_tree(User **p, User *x);
 int Tree_height(Tree *A);
 void MaxDiff(User *u, int *max);
 User* Remove(User **r, int target);
+int remover2(User **raiz,int valor);
 
 void PrintTree(Tree*, char*, char*, char*);
 

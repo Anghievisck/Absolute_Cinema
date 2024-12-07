@@ -253,6 +253,77 @@ void SupPrintUsers(User *u, char* p_number, char* p_string, char* p_list){
     }
 }
 
+int remover2(User **raiz,int valor){
+    int controle;
+
+    if(*raiz==NULL)
+    {
+        printf("\nEste valor não existe\n");
+        return 0;
+    }
+    if(valor < (*raiz)->numero_usp)
+    {
+        if((controle=remover(&((*raiz)->nextL),valor))==1)
+        {
+            if(fatorBalanceamento(*raiz)>=2)
+            {
+                if(alturaNoh((*raiz)->nextR->nextL)<=alturaNoh((*raiz)->nextR->nextR))
+                    EE(raiz);
+                else
+                    ED(raiz);
+            }
+        }
+    }
+    if(valor>(*raiz)->numero_usp)
+    {
+        if ((controle=remover(&((*raiz)->nextR),valor))==1)
+        {
+
+            if(fatorBalanceamento(*raiz)>=2)
+            {
+                if(alturaNoh((*raiz)->nextL->nextR)<=alturaNoh((*raiz)->nextL->nextL))
+                    DD(raiz);
+                else
+                    DE(raiz);
+            }
+        }
+    }
+    if((*raiz)->numero_usp==valor)
+    {
+        if(((*raiz)->nextL==NULL)||((*raiz)->nextR==NULL)) //Pai tem um filho ou nenhum filho
+        {
+            User *nohAuxiliar = *raiz;
+
+            if((*raiz)->nextL!=NULL)
+                *raiz=(*raiz)->nextL;
+            else
+                *raiz=(*raiz)->nextL;
+            free(nohAuxiliar);
+            nohAuxiliar = NULL;
+            printf("\nNó removido com sucesso!\n");
+        }
+        else 
+        {
+        	//o pai tem dois filhos. 
+        	//Substituir pelo nó mais a esquerda da subárvore da direita
+            
+            User *nohAuxiliar = procuraMenor(&(*raiz)->nextR);
+            (*raiz)->numero_usp = nohAuxiliar->numero_usp;
+            remover(&(*raiz)->nextR,(*raiz)->numero_usp);
+            if(fatorBalanceamento(*raiz)>=2)
+            {
+                if(alturaNoh((*raiz)->nextL->nextR)<=alturaNoh((*raiz)->nextL->nextL))
+                    DD(raiz);
+                else
+                    ED(raiz);
+            }
+        }
+        return 1;
+    }
+    return controle;
+}
+
+
 User* Remove(User **r, int target){
     if(r == NULL){
         printf("Usuario nao encontrado. \n");
