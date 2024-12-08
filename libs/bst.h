@@ -22,6 +22,7 @@ int Tree_height(Tree *A);
 int Maior_Gap(Tree *t);
 void MaxDiff(User *u, int *max);
 int RemoveNode(User **raiz,int valor);
+int aux_remove(User **p, int valor, int *diminuiu, Tree *t)
 
 void PrintTree(Tree*, char*, char*, char*);
 void TreeToArchive(Tree*, char*, char*, char*, FILE *);
