@@ -185,6 +185,122 @@ int aux_insert(User **p, User *x, int *cresceu, Tree *t){
     }
 };
 
+int aux_remove(User **p, int valor, int *diminuiu, Tree *t) {
+    if (*p == NULL) {
+        return 0; // Valor não encontrado
+    }
+
+    if (valor < (*p)->numero_usp) {
+        if (aux_remove(&(*p)->nextL, valor, diminuiu, t)) {
+            if (*diminuiu) {
+                switch ((*p)->fb) {
+                    case -1:
+                        (*p)->fb = 0;
+                        *diminuiu = 1;
+                        break;
+                    case 0:
+                        (*p)->fb = 1;
+                        *diminuiu = 0;
+                        break;
+                    case 1:
+                        if ((*p)->nextR->fb >= 0) {
+                            DD(p);
+                            if ((*p)->nextR->fb == 0) {
+                                *diminuiu = 0;
+                            } else {
+                                *diminuiu = 1;
+                            }
+                        } else {
+                            DE(p);
+                            *diminuiu = 1;
+                        }
+                        break;
+                }
+            }
+            return 1;
+        }
+    } else if (valor > (*p)->numero_usp) {
+        if (aux_remove(&(*p)->nextR, valor, diminuiu, t)) {
+            if (*diminuiu) {
+                switch ((*p)->fb) {
+                    case 1:
+                        (*p)->fb = 0;
+                        *diminuiu = 1;
+                        break;
+                    case 0:
+                        (*p)->fb = -1;
+                        *diminuiu = 0;
+                        break;
+                    case -1:
+                        if ((*p)->nextL->fb <= 0) {
+                            EE(p);
+                            if ((*p)->nextL->fb == 0) {
+                                *diminuiu = 0;
+                            } else {
+                                *diminuiu = 1;
+                            }
+                        } else {
+                            ED(p);
+                            *diminuiu = 1;
+                        }
+                        break;
+                }
+            }
+            return 1;
+        }
+    } else {
+        // Nó encontrado
+        User *aux;
+        if ((*p)->nextL == NULL || (*p)->nextR == NULL) {
+            aux = *p;
+            if ((*p)->nextL == NULL) {
+                *p = (*p)->nextR;
+            } else {
+                *p = (*p)->nextL;
+            }
+            free(aux->nome);
+            DestroyList(aux->movies);
+            free(aux);
+            t->Number_of_nodes -= 1;
+            *diminuiu = 1;
+        } else {
+            // Substituir pelo sucessor na subárvore direita
+            aux = (*p)->nextR;
+            while (aux->nextL != NULL) {
+                aux = aux->nextL;
+            }
+            (*p)->numero_usp = aux->numero_usp;
+            aux_remove(&(*p)->nextR, aux->numero_usp, diminuiu, t);
+            if (*diminuiu) {
+                switch ((*p)->fb) {
+                    case 1:
+                        (*p)->fb = 0;
+                        *diminuiu = 1;
+                        break;
+                    case 0:
+                        (*p)->fb = -1;
+                        *diminuiu = 0;
+                        break;
+                    case -1:
+                        if ((*p)->nextL->fb <= 0) {
+                            EE(p);
+                            if ((*p)->nextL->fb == 0) {
+                                *diminuiu = 0;
+                            } else {
+                                *diminuiu = 1;
+                            }
+                        } else {
+                            ED(p);
+                            *diminuiu = 1;
+                        }
+                        break;
+                }
+            }
+        }
+        return 1;
+    }
+    return 0;
+}
 
 /*
     Se a árvore existe, retorna 1 ou 0, respectivamente vazia ou
