@@ -13,8 +13,11 @@ user.o: libs/user.c libs/user.h libs/lista_ordenada.h
 bst.o: libs/bst.c libs/bst.h libs/lista_ordenada.h
 	gcc -c libs/bst.c
 
-all: main.o string_auxiliar.o lista_ordenada.o user.o bst.o
-	gcc -o main main.o lista_ordenada.o user.o bst.o string_auxiliar.o
+funcs_main.o: libs/funcs_main.c libs/bst.h libs/user.h libs/lista_ordenada.h
+	gcc -c libs/funcs_main.c
+
+all: main.o string_auxiliar.o lista_ordenada.o user.o bst.o funcs_main.o
+	gcc -o main main.o lista_ordenada.o user.o bst.o string_auxiliar.o funcs_main.o
 
 clean:
 	rm *.o main
