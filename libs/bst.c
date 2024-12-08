@@ -3,7 +3,6 @@
 
 #include "bst.h"
 
-User* balanciar(User *);
 void SupPrintUsers(User*, char*, char*, char*);
 void SupToArchive(User *u, char* p_number, char* p_string, char* p_list, FILE *arquivo);
 
@@ -120,21 +119,6 @@ void DE(User **r) {
     *r = neto;
 }
 
-User* balanciar(User *r){
-    int fb = fbnode(r);
-    if(fb < -1 && fbnode(r->nextR) <= 0){
-        DD(&r);
-    } else if(fb > 1 && fbnode(r->nextL) >= 0){
-        EE(&r);
-    } else if(fb > 1 && fbnode(r->nextL) < 0){
-        DE(&r);
-    } else if(fb < -1 && fbnode(r->nextR) >0){
-        ED(&r);
-    }
-
-    return(r);
-}
-
 int insert_in_tree(Tree *t, User *x){
     int cresceu;
     return(aux_insert(&(t->root), x, &cresceu, t));
@@ -215,64 +199,6 @@ int IsTreeEmpty(Tree *t){
     }
 }
 
-//funcao suporte para DeleteUser
-User* FindMax(User *u){
-    User* aux = u->nextL;
-    while(aux != NULL){
-        if(aux->nextR != NULL){
-            User* sup = aux->nextR;
-            if(sup->nextR == NULL){
-                aux->nextR = sup->nextL;
-
-                return sup;
-            }
-        } else {
-            return aux;
-        }
-
-        aux = aux->nextR;
-    }
-
-    return aux;
-}
-
-//função suporte para Delete
-void DeleteUser(User **u){
-    if(u == NULL || *u == NULL){
-        return;
-    }
-    
-    User *aux;
-
-    if((*u)->nextL == NULL && (*u)->nextR == NULL){
-        free((*u)->nome);
-        DestroyList((*u)->movies);
-
-        free(*u);
-        free(u);
-
-        return;
-    } else if((*u)->nextL == NULL || (*u)->nextR == NULL){
-        aux = ((*u)->nextL == NULL) ? (*u)->nextR : (*u)->nextL;
-    } else {
-        aux = FindMax((*u));
-
-        if(aux == NULL){
-            aux = (*u)->nextR;
-        }
-    }
-
-    if(aux == NULL){
-        return;
-    }
-
-    free((*u)->nome);
-    //    DestroyList((*u)->favoriteMovies);
-    free((*u));
-
-    *u = aux;
-}
-
 //função suporte para Delete
 void DeleteUsers(User **u){
     if(u == NULL || *u == NULL){
@@ -283,7 +209,7 @@ void DeleteUsers(User **u){
     DeleteUsers(&(*u)->nextR);
 
     free((*u)->nome);
-    //    DestroyList(*u)->favoriteMovies);
+    DestroyList((*u)->movies);
 
     free((*u));
     *u = NULL;
@@ -389,11 +315,12 @@ int RemoveNode(User **raiz,int valor) {
         if(((*raiz)->nextL==NULL)||((*raiz)->nextR==NULL)) //Pai tem um filho ou nenhum filho
         {
             User *nohAuxiliar = *raiz;
-
             if((*raiz)->nextL!=NULL)
                 *raiz=(*raiz)->nextL;
             else
                 *raiz=(*raiz)->nextL;
+            free(nohAuxiliar->nome);
+            DestroyList(nohAuxiliar->movies);
             free(nohAuxiliar);
             nohAuxiliar = NULL;
         }
