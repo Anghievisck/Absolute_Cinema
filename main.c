@@ -101,7 +101,7 @@ int main(int argc, char* argv[]){
             break;
             
             case ARQUIVO_TEXTO:
-                ExportTree(t);
+                ExportTree(t, mais_legais);
             break;
 
             case NUMERO_NOS_ARVORE:

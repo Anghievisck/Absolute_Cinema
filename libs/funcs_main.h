@@ -20,4 +20,4 @@ void EncontrarTresMaiores(List *l);
 void RecomedacaoSimilar(Tree *t);
 void RecomendacaoDiff(Tree *t);
 
-void ExportTree(Tree *t);
+void ExportTree(Tree *t, List *L);

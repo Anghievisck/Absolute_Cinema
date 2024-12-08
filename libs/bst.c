@@ -27,7 +27,6 @@ void MaxDiff(User *u, int *max){
         if((u->fb)*(u->fb) > (*max)*(*max)){
             *max = u->fb;
         }
-        printf("%d\n", u->fb);
         MaxDiff(u->nextL, max);
         MaxDiff(u->nextR, max);
     }
@@ -185,13 +184,13 @@ int aux_insert(User **p, User *x, int *cresceu, Tree *t){
     }
 };
 
-int aux_remove(User **p, int valor, int *diminuiu, Tree *t) {
+int RemoveNode(User **p, int valor, int *diminuiu, Tree *t) {
     if (*p == NULL) {
         return 0; // Valor não encontrado
     }
 
     if (valor < (*p)->numero_usp) {
-        if (aux_remove(&(*p)->nextL, valor, diminuiu, t)) {
+        if (RemoveNode(&(*p)->nextL, valor, diminuiu, t)) {
             if (*diminuiu) {
                 switch ((*p)->fb) {
                     case -1:
@@ -220,7 +219,7 @@ int aux_remove(User **p, int valor, int *diminuiu, Tree *t) {
             return 1;
         }
     } else if (valor > (*p)->numero_usp) {
-        if (aux_remove(&(*p)->nextR, valor, diminuiu, t)) {
+        if (RemoveNode(&(*p)->nextR, valor, diminuiu, t)) {
             if (*diminuiu) {
                 switch ((*p)->fb) {
                     case 1:
@@ -270,7 +269,7 @@ int aux_remove(User **p, int valor, int *diminuiu, Tree *t) {
                 aux = aux->nextL;
             }
             (*p)->numero_usp = aux->numero_usp;
-            aux_remove(&(*p)->nextR, aux->numero_usp, diminuiu, t);
+            RemoveNode(&(*p)->nextR, aux->numero_usp, diminuiu, t);
             if (*diminuiu) {
                 switch ((*p)->fb) {
                     case 1:
@@ -391,76 +390,4 @@ void SupToArchive(User *u, char* p_number, char* p_string, char* p_list, FILE *a
         List_to_archive(u->movies, arquivo, &e);
         SupToArchive(u->nextR, p_number, p_string, p_list, arquivo);
     }
-}
-
-int RemoveNode(User **raiz,int valor) {
-    int controle;
-
-    if(*raiz==NULL)
-    {
-        return 0;
-    }
-    if(valor < (*raiz)->numero_usp)
-    {
-        if((controle=RemoveNode(&((*raiz)->nextL),valor))==1)
-        {
-            if(fbnode(*raiz)>=2)
-            {
-                if(Node_height((*raiz)->nextR->nextL)<=Node_height((*raiz)->nextR->nextR))
-                    EE(raiz);
-                else
-                    ED(raiz);
-            }
-        }
-    }
-    if(valor>(*raiz)->numero_usp)
-    {
-        if ((controle=RemoveNode(&((*raiz)->nextR),valor))==1)
-        {
-
-            if(fbnode(*raiz)>=2)
-            {
-                if(Node_height((*raiz)->nextL->nextR)<=Node_height((*raiz)->nextL->nextL))
-                    DD(raiz);
-                else
-                    DE(raiz);
-            }
-        }
-    }
-    if((*raiz)->numero_usp==valor)
-    {
-        if(((*raiz)->nextL==NULL)||((*raiz)->nextR==NULL)) //Pai tem um filho ou nenhum filho
-        {
-            User *nohAuxiliar = *raiz;
-            if((*raiz)->nextL!=NULL)
-                *raiz=(*raiz)->nextL;
-            else
-                *raiz=(*raiz)->nextL;
-            free(nohAuxiliar->nome);
-            DestroyList(nohAuxiliar->movies);
-            free(nohAuxiliar);
-            nohAuxiliar = NULL;
-        }
-        else 
-        {
-        	//o pai tem dois filhos. 
-        	//Substituir pelo nó mais a esquerda da subárvore da direita
-            
-            User *nohAuxiliar = (*raiz)->nextR;
-            while(nohAuxiliar->nextL != NULL){
-                nohAuxiliar = nohAuxiliar->nextL;
-            }
-            (*raiz)->numero_usp = nohAuxiliar->numero_usp;
-            RemoveNode(&(*raiz)->nextR,(*raiz)->numero_usp);
-            if(fbnode(*raiz)>=2)
-            {
-                if(Node_height((*raiz)->nextL->nextR)<=Node_height((*raiz)->nextL->nextL))
-                    DD(raiz);
-                else
-                    ED(raiz);
-            }
-        }
-        return 1;
-    }
-    return controle;
 }

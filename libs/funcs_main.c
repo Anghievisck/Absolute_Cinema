@@ -91,8 +91,7 @@ User* Cria_usuario(List *G, Tree *t) {
     }
     adiciona_filme(u, G, &erro);
     if(erro) {
-        printf("Cadastro nao efetuado \n");
-        return NULL;
+        printf("Filme nao adicionado. Usuario cadastrado \n");
     }
 
     return u;
@@ -102,18 +101,12 @@ User* Cria_usuario(List *G, Tree *t) {
 void Remocao(Tree *t){
     if (IsTreeEmpty(t)) return;
     int n = GetInteger("Digite seu numero USP:\n>>> ", "O **NUMERO** USP deve ser um numero...\n");
-<<<<<<< HEAD
-    if(RemoveNode(&(t->root), n)) {
-        printf("\nNo removido com sucesso!\n");
-    }
-    else
-    printf("Usuario nao encontrado");
-        
-=======
+
     int diminuiu;
-    aux_remove(&(t->root), n, &diminuiu, t);
-    printf("\nNo removido com sucesso!\n");
->>>>>>> 1b427973e5bffe35f8b4d463d1c6b9ffd8eaf5e2
+    if(RemoveNode(&(t->root), n, &diminuiu, t))
+        printf("\nNo removido com sucesso!\n");
+    else
+        printf("Usuario nao encontrado");
 }
 
 //Encontra os três filmes mais gostados
@@ -204,7 +197,8 @@ void RecomendacaoDiff(Tree *t){
 }
 
 //Escreve em um arquivo todas as informacoes da arvore
-void ExportTree(Tree *t){
+void ExportTree(Tree *t, List *L){
+    int erro;
     FILE *fh_output; // File handler, modo de saída
 
     fh_output = fopen("tree_data.txt", "w");
@@ -221,6 +215,8 @@ void ExportTree(Tree *t){
     fprintf(fh_output, "a) Atualmente, a ABB possui um total de %d usuarios distintos\n", t->Number_of_nodes);
     fprintf(fh_output, "b) Atualmente, a altura da ABB é %d\n", Tree_height(t));
     fprintf(fh_output, "c) Atualmente, a maior diferenca de alturas da ABB é de %d\n", Maior_Gap(t));
+    fprintf(fh_output, "\nFilmes cadastrados: \n\n");
+    List_to_archive(L, fh_output, &erro);
     fprintf(fh_output, "\nDados dos usuarios: \n\n");
     TreeToArchive(t, "Numero USP", "Nome", "Filmes", fh_output);
 

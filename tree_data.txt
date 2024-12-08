@@ -1,0 +1,28 @@
+a) Atualmente, a ABB possui um total de 3 usuarios distintos
+b) Atualmente, a altura da ABB é 2
+c) Atualmente, a maior diferenca de alturas da ABB é de 0
+
+Filmes cadastrados: 
+
+A: 3
+B: 2
+C: 1
+D: 2
+
+
+Dados dos usuarios: 
+
+Numero USP: 5 | Nome: Spinas
+Filmes: 
+A
+B
+
+Numero USP: 20 | Nome: Kainas
+Filmes: 
+B
+D
+
+Numero USP: 30 | Nome: jose
+Filmes: 
+A
+
