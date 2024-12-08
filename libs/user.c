@@ -1,9 +1,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "bst.h"
-#include "user.h"
 #include "lista_ordenada.h"
+#include "bst.h"
+
+#include "user.h"
 
 User* SupFindUser(User*, int);
 
