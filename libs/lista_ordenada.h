@@ -32,6 +32,7 @@ List* CompareLists(List *L, List *G, int *erro);
 List* MergeLists(List *L, List *G, int *erro);
 
 void printList(List *L, int *erro);
+void List_to_archive(List *L,FILE *arquivo, int *erro);
 
 void remove_all_nodes(List *L);
 void DestroyList(List *L);

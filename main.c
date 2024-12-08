@@ -18,7 +18,8 @@ void delay(float seconds) {
 void Remocao(Tree *t){
     if (IsTreeEmpty(t)) return;
     int n = GetInteger("Digite seu numero USP:\n>>> ", "O **NUMERO** USP deve ser um numero...\n");
-    remover2(&(t->root), n);
+    RemoveNode(&(t->root), n);
+    printf("\nNo removido com sucesso!\n");
 }
 
 void adiciona_filme(User *usuario, List *geral, int *erro) {
@@ -111,15 +112,7 @@ User* Cria_usuario(List *G, Tree *t) {
 }
 
 
-int Maior_Gap(Tree *t){
-    int maior=0;
-    MaxDiff(t->root, &maior);
-    //como pegamos os fatores de balanceamento pode ser o caso de ser menor que 0
-    if(maior < 0){
-        maior = maior - 2*maior; 
-    }
-    return(maior);
-}
+
 
 void EncontrarTresMaiores(List *l) {
     // Inicializa os 3 maiores com valores mínimos
@@ -210,10 +203,21 @@ void ExportTree(Tree *t){
 
     fh_output = fopen("tree_data.txt", "w");
 
+    if(fh_output == NULL) {
+        printf("Nao foi possivel criar o arquivo");
+        return;
+    }
+    else {
+        printf("Arquivo criado");
+    }
+
     int placeholder = 0;
-    fprintf(fh_output, "a) Atualmente, a ABB possui um total de %d usuarios distintos\n", placeholder);
-    fprintf(fh_output, "b) Atualmente, a altura da ABB é %d\n", t->root);
-    fprintf(fh_output, "c) Atualmente, a maior diferenca de alturas da ABB é de %d\n", placeholder);
+    fprintf(fh_output, "a) Atualmente, a ABB possui um total de %d usuarios distintos\n", t->Number_of_nodes);
+    fprintf(fh_output, "b) Atualmente, a altura da ABB é %d\n", Tree_height(t));
+    fprintf(fh_output, "c) Atualmente, a maior diferenca de alturas da ABB é de %d\n", Maior_Gap(t));
+    fprintf(fh_output, "\nDados dos usuarios: \n\n");
+    TreeToArchive(t, "Numero USP", "Nome", "Filmes", fh_output);
+
 
     fclose(fh_output);
 }
@@ -375,7 +379,7 @@ int main(int argc, char* argv[]){
         } //fim do switch
 
 
-        delay(3);
+        delay(1);
         printf("\nFazer proxima acao? [S/N (fechara o programa)]:\n");
         char option;
         scanf(" %c", &option);

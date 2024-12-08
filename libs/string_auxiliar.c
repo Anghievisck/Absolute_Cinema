@@ -52,7 +52,7 @@ void to_lowercase(Elem str) {
     }
 }
 
-
+//Escreve um determinado prompt no terminal e recebe strings até a string ser um número
 int GetInteger(char* prompt, char* errorPrompt) {
     char* placeholder = (char*)malloc(sizeof(char) * LENGTH);
 
@@ -87,6 +87,7 @@ int GetInteger(char* prompt, char* errorPrompt) {
     } //fim do while
 }
 
+//Escreve um determinado prompt e retorna uma string, procurando resolver problemas de pegar o caratere '\n'
 char* GetString(char* prompt) {
     char* placeholder = (char*)malloc(sizeof(char) * LENGTH);
     printf("%s", prompt);

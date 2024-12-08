@@ -7,6 +7,7 @@
 
 User* balanciar(User *);
 void SupPrintUsers(User*, char*, char*, char*);
+void SupToArchive(User *u, char* p_number, char* p_string, char* p_list, FILE *arquivo);
 
 int aux_insert(User **p, User *x, int *cresceu);
 //void BalanceSubtree(User**, int n);
@@ -217,6 +218,81 @@ int IsTreeEmpty(Tree *t){
     }
 }
 
+//funcao suporte para DeleteUser
+User* FindMax(User *u){
+    User* aux = u->nextL;
+    while(aux != NULL){
+        if(aux->nextR != NULL){
+            User* sup = aux->nextR;
+            if(sup->nextR == NULL){
+                aux->nextR = sup->nextL;
+
+                return sup;
+            }
+        } else {
+            return aux;
+        }
+
+        aux = aux->nextR;
+    }
+
+    return aux;
+}
+
+//função suporte para Delete
+void DeleteUser(User **u){
+    if(u == NULL || *u == NULL){
+        return;
+    }
+    
+    User *aux;
+
+    if((*u)->nextL == NULL && (*u)->nextR == NULL){
+        free((*u)->nome);
+        DestroyList((*u)->movies);
+
+        free(*u);
+        free(u);
+
+        return;
+    } else if((*u)->nextL == NULL || (*u)->nextR == NULL){
+        aux = ((*u)->nextL == NULL) ? (*u)->nextR : (*u)->nextL;
+    } else {
+        aux = FindMax((*u));
+
+        if(aux == NULL){
+            aux = (*u)->nextR;
+        }
+    }
+
+    if(aux == NULL){
+        return;
+    }
+
+    free((*u)->nome);
+    //    DestroyList((*u)->favoriteMovies);
+    free((*u));
+
+    *u = aux;
+}
+
+//função suporte para Delete
+void DeleteUsers(User **u){
+    if(u == NULL || *u == NULL){
+        return;
+    }
+
+    DeleteUsers(&(*u)->nextL);
+    DeleteUsers(&(*u)->nextR);
+
+    free((*u)->nome);
+    //    DestroyList(*u)->favoriteMovies);
+
+    free((*u));
+    *u = NULL;
+}
+
+
 void Delete(Tree **t){
     if((*t)->root == NULL){
         free(t);
@@ -231,6 +307,16 @@ void Delete(Tree **t){
 
 int Tree_height(Tree *A) {
     return(Node_height(A->root));
+}
+
+int Maior_Gap(Tree *t){
+    int maior=0;
+    MaxDiff(t->root, &maior);
+    //como pegamos os fatores de balanceamento pode ser o caso de ser menor que 0
+    if(maior < 0){
+        maior = maior - 2*maior; 
+    }
+    return(maior);
 }
 
 void PrintTree(Tree *t, char* p_number, char* p_string, char*p_list){
@@ -250,17 +336,33 @@ void SupPrintUsers(User *u, char* p_number, char* p_string, char* p_list){
     }
 }
 
-int remover2(User **raiz,int valor){
+void TreeToArchive(Tree *t, char* p_number, char* p_string, char* p_list, FILE *arquivo) {
+    SupToArchive(t->root, p_number, p_string, p_list, arquivo);
+}
+
+void SupToArchive(User *u, char* p_number, char* p_string, char* p_list, FILE *arquivo) {
+    int e;
+    if(u == NULL){
+        return;
+    } else {
+        SupToArchive(u->nextL, p_number, p_string, p_list, arquivo);
+        fprintf(arquivo, "%s: %d | %s: %s", p_number, u->numero_usp, p_string, u->nome);
+        fprintf(arquivo, "\n%s: \n", p_list);
+        List_to_archive(u->movies, arquivo, &e);
+        SupToArchive(u->nextR, p_number, p_string, p_list, arquivo);
+    }
+}
+
+int RemoveNode(User **raiz,int valor) {
     int controle;
 
     if(*raiz==NULL)
     {
-        printf("\nEste valor não existe\n");
         return 0;
     }
     if(valor < (*raiz)->numero_usp)
     {
-        if((controle=remover2(&((*raiz)->nextL),valor))==1)
+        if((controle=RemoveNode(&((*raiz)->nextL),valor))==1)
         {
             if(fbnode(*raiz)>=2)
             {
@@ -273,7 +375,7 @@ int remover2(User **raiz,int valor){
     }
     if(valor>(*raiz)->numero_usp)
     {
-        if ((controle=remover2(&((*raiz)->nextR),valor))==1)
+        if ((controle=RemoveNode(&((*raiz)->nextR),valor))==1)
         {
 
             if(fbnode(*raiz)>=2)
@@ -297,7 +399,6 @@ int remover2(User **raiz,int valor){
                 *raiz=(*raiz)->nextL;
             free(nohAuxiliar);
             nohAuxiliar = NULL;
-            printf("\nNó removido com sucesso!\n");
         }
         else 
         {
@@ -309,7 +410,7 @@ int remover2(User **raiz,int valor){
                 nohAuxiliar = nohAuxiliar->nextL;
             }
             (*raiz)->numero_usp = nohAuxiliar->numero_usp;
-            remover2(&(*raiz)->nextR,(*raiz)->numero_usp);
+            RemoveNode(&(*raiz)->nextR,(*raiz)->numero_usp);
             if(fbnode(*raiz)>=2)
             {
                 if(Node_height((*raiz)->nextL->nextR)<=Node_height((*raiz)->nextL->nextL))
@@ -321,50 +422,4 @@ int remover2(User **raiz,int valor){
         return 1;
     }
     return controle;
-}
-
-
-User* Remove(User **r, int target){
-    if(r == NULL){
-        printf("Usuario nao encontrado. \n");
-        return NULL;
-    } else {
-        if((*r)->numero_usp == target){
-            if((*r)->nextL == NULL && (*r)->nextR == NULL){
-                DeleteUser(r);
-                return(NULL);
-            } else {
-                if((*r)->nextL != NULL && (*r)->nextR != NULL){
-                    User **aux = &(*r)->nextL;
-                    while((*aux)->nextR != NULL){
-                        aux = &(*aux)->nextR;
-                    }
-                    User **temp = aux;
-                    *aux = *r;
-                    *r = *temp;
-                    (*r)->nextL = Remove(&(*r)->nextL, target);
-                    return(*r);
-                }else{
-                    User *aux;
-                    if((*r)->nextL != NULL){
-                        aux = (*r)->nextL;
-                    }else{
-                        aux = (*r)->nextR;
-                    }
-                    DeleteUser(r);
-                    return(aux);
-                }
-
-            }
-
-        } else{
-            if(target < (*r)->numero_usp){
-                (*r)->nextL = Remove(&(*r)->nextL, target);
-            }else{
-                (*r)->nextR = Remove(&(*r)->nextR, target);
-            }
-        }
-        (*r) = balanciar(*r);
-        return((*r));
-    }
 }

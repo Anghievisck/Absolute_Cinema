@@ -202,6 +202,31 @@ void printList(List *L,int *erro) {
     printf("\n");
 }
 
+//Escreve em um arquivo uma determinada lista
+void List_to_archive(List *L,FILE *arquivo, int *erro) {
+    *erro = 0;
+    if(L == NULL || isListEmpty(L)) {
+        *erro = 1;
+        return;
+    }
+    
+    Node *aux = L->inicio;
+    while(aux != NULL) {
+        Elem str = (Elem)malloc(strlen(aux->info)+1);
+        strcpy(str, aux->info);
+        to_lowercase(str);
+        to_uppercase_after_space(str);
+        if(L->tipo == UNICA)
+            fprintf(arquivo, "%s\n", str);
+        else 
+            fprintf(arquivo, "%s: %d\n", str, aux->qnt_igual);
+        aux = aux->prox;
+
+        free(str);
+    }
+    fprintf(arquivo, "\n");
+}
+
 //tira todos os elementos da lista
 void remove_all_nodes(List *L) {
     Node *aux1, *aux2;
