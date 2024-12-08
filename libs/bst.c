@@ -7,9 +7,7 @@ User* balanciar(User *);
 void SupPrintUsers(User*, char*, char*, char*);
 void SupToArchive(User *u, char* p_number, char* p_string, char* p_list, FILE *arquivo);
 
-int aux_insert(User **p, User *x, int *cresceu);
-//void BalanceSubtree(User**, int n);
-//int UpdateDegree(User*);
+int aux_insert(User **p, User *x, int *cresceu, Tree *t);
 
 Tree* CreateTree(int *e){
     *e = 0;
@@ -137,20 +135,21 @@ User* balanciar(User *r){
     return(r);
 }
 
-int insert_in_tree(User **p, User *x){
+int insert_in_tree(Tree *t, User *x){
     int cresceu;
-    return(aux_insert(p, x, &cresceu));
+    return(aux_insert(&(t->root), x, &cresceu, t));
 };
 //Obs como NO e elem é meio que a mesma bomba no caso User vou ter que dar uma alterada no codigo do prof 
-int aux_insert(User **p, User *x, int *cresceu){
+int aux_insert(User **p, User *x, int *cresceu, Tree *t){
     if(*p == NULL){
         *p = x;
         *cresceu = 1;
+        t->Number_of_nodes = t->Number_of_nodes + 1;
         return(1);
     }else if( x->numero_usp == (*p) -> numero_usp){
         return(0);
     }else if( x->numero_usp < (*p) -> numero_usp){
-        if(aux_insert(&(*p)->nextL, x, cresceu)){
+        if(aux_insert(&(*p)->nextL, x, cresceu, t)){
             if(*cresceu){
                 switch((*p)->fb){
                     case -1:
@@ -175,7 +174,7 @@ int aux_insert(User **p, User *x, int *cresceu){
         }//fim do if
         else return(0);
     }else if(x->numero_usp > (*p) -> numero_usp){
-        if(aux_insert(&(*p)->nextR, x, cresceu)){
+        if(aux_insert(&(*p)->nextR, x, cresceu, t)){
             if(*cresceu) {
                 switch((*p)->fb){
                     case -1:

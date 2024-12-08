@@ -17,7 +17,7 @@ int IsTreeEmpty(Tree*);
 void Delete(Tree**);
 
 void BalanceTree(Tree**, int n);
-int insert_in_tree(User **p, User *x);
+int insert_in_tree(Tree *t, User *x);
 int Tree_height(Tree *A);
 int Maior_Gap(Tree *t);
 void MaxDiff(User *u, int *max);

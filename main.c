@@ -63,12 +63,9 @@ int main(int argc, char* argv[]){
         printf("\n");
         switch(acao) {
             case NOVO_CADASTRO:
-                insert_in_tree(&(t->root), Cria_usuario(mais_legais, t));
-                if(erro != 0){ 
+                insert_in_tree(t, Cria_usuario(mais_legais, t));
+                if(erro != 0)
                     printf("\nErro ao colocar o usuario na arvore\n");
-                }else{
-                    t->Number_of_nodes++;
-                }
             break;
 
             case LISTAR_TODOS_ALUNOS:
@@ -116,7 +113,7 @@ int main(int argc, char* argv[]){
             break;
 
             case MAIOR_DIF_H_SUBARVORES:
-                printf("A maior diferenca de altura é %d. \n", Maior_Gap(t));
+                printf("A maior diferenca de altura e %d. \n", Maior_Gap(t));
             break;
 
             case RETIRAR_CADASTRO:
