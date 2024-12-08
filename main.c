@@ -361,8 +361,8 @@ int main(int argc, char* argv[]){
                 Delete(&t);
                 DestroyList(mais_legais);
                 int erro;
+                t = CreateTree(&erro);
                 mais_legais = Create_list(PESOS, &erro);
-                t->Number_of_nodes = 0;
             break;
 
             case FECHAR_PROGRAMA:
