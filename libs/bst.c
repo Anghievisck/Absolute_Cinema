@@ -27,6 +27,7 @@ void MaxDiff(User *u, int *max){
         if((u->fb)*(u->fb) > (*max)*(*max)){
             *max = u->fb;
         }
+        printf("%d\n", u->fb);
         MaxDiff(u->nextL, max);
         MaxDiff(u->nextR, max);
     }

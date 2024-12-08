@@ -102,8 +102,12 @@ User* Cria_usuario(List *G, Tree *t) {
 void Remocao(Tree *t){
     if (IsTreeEmpty(t)) return;
     int n = GetInteger("Digite seu numero USP:\n>>> ", "O **NUMERO** USP deve ser um numero...\n");
-    RemoveNode(&(t->root), n);
-    printf("\nNo removido com sucesso!\n");
+    if(RemoveNode(&(t->root), n)) {
+        printf("\nNo removido com sucesso!\n");
+    }
+    else
+    printf("Usuario nao encontrado");
+        
 }
 
 //Encontra os três filmes mais gostados
