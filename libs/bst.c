@@ -30,8 +30,23 @@ void MaxDiff(User *u, int *max){
         MaxDiff(u->nextL, max);
         MaxDiff(u->nextR, max);
     }
-
 }
+
+int Node_height(User* p) {
+    int alt_esq, alt_dir;
+    if(p == NULL)
+        return 0;
+    alt_esq = 1 + Node_height(p->nextL);
+    alt_dir = 1 + Node_height(p->nextR);
+    if(alt_esq > alt_dir)
+        return(alt_esq);
+    return(alt_dir);
+}
+
+int fbnode(User *r){
+    return(Node_height(r->nextR)-Node_height(r->nextL));
+}
+
 void DD(User **r) {
     User *pai = *r;
     User *filho = pai->nextR;
@@ -76,21 +91,6 @@ void ED(User **r) {
     }
     neto->fb = 0;
     *r = neto;
-}
-
-int Node_height(User* p) {
-    int alt_esq, alt_dir;
-    if(p == NULL)
-        return 0;
-    alt_esq = 1 + Node_height(p->nextL);
-    alt_dir = 1 + Node_height(p->nextR);
-    if(alt_esq > alt_dir)
-        return(alt_esq);
-    return(alt_dir);
-}
-
-int fbnode(User *r){
-    return(Node_height(r->nextR)-Node_height(r->nextL));
 }
 
 void DE(User **r) {
